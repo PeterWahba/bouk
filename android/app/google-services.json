@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "296802698514",
+    "project_id": "book-app-f302f",
+    "storage_bucket": "book-app-f302f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296802698514:android:c21a0507d35109e949dfcb",
+        "android_client_info": {
+          "package_name": "com.example.caffa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvrEsk8TaiUmpjj_bct20AwnTaRB9drQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

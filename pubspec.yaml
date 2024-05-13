@@ -55,6 +55,9 @@ dependencies:
   lottie: ^2.0.0
   connectivity: ^3.0.6
   conditional_builder_null_safety:
+  dotted_line:
+  add_to_cart_animation: ^2.0.3
+  pretty_qr_code: ^3.3.0
 
 dev_dependencies:
   flutter_test:

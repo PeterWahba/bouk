@@ -10,4 +10,13 @@ mixin Helpers{
       )
     );
   }
+
+  double mediaQueryHeight(context) => MediaQuery.of(context).size.height;
+  double mediaQueryWidth(context) => MediaQuery.of(context).size.width;
+
+  Color offWhite = Color(0xFFF2F3F8);
+  Color offBlue = Color(0xFF1D71B8);
+
+
+
 }

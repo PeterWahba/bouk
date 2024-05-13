@@ -42,9 +42,9 @@ class _SplashScreenState extends State<SplashScreen> {
       // Get.off(() => AuthScreen(), transition: Transition.cupertino);
 
       if (AppSettingsPreferences().id != '') {
-        Get.off(() => AuthScreen(), transition: Transition.cupertino);
+        // Get.off(() => AuthScreen(), transition: Transition.cupertino);
 
-        // Get.off(() => HomeScreen(), transition: Transition.cupertino);
+        Get.off(() => HomeScreen(), transition: Transition.cupertino);
       } else
         Get.off(() => AuthScreen(), transition: Transition.cupertino);
     });

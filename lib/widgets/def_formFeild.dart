@@ -28,7 +28,7 @@ Widget defaultFormFeild0({
       keyboardType: inputType,
       obscureText: isObsecured,
       decoration: InputDecoration(
-
+        alignLabelWithHint: true,
         filled: true,
         fillColor: Colors.black.withOpacity(0),
         enabledBorder: UnderlineInputBorder(

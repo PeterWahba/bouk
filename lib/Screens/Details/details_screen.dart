@@ -1,6 +1,9 @@
 import 'package:caffa/Models/User.dart';
 import 'package:caffa/Screens/CheckOut/checkout_screen.dart';
-import 'package:caffa/Screens/basket/basket_screen.dart';
+import 'package:caffa/Screens/basket/presentation/basket_screen.dart';
+import 'package:caffa/basket_controller/basket_controller.dart';
+import 'package:caffa/basket_controller/basket_model.dart';
+import 'package:caffa/utils/helpers.dart';
 import 'package:caffa/widgets/def_formFeild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,10 +21,11 @@ class DetailsScreen extends StatefulWidget {
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _DetailsScreenState extends State<DetailsScreen> with Helpers {
   ///horizontal list of buttons
-  List<String> buttonList = ["قهوة اليوم بارد", "قهوة اليوم حار"];
-  var recordController =TextEditingController();
+  List<String> buttonList = ['قهوة اليوم حار', 'قهوة اليوم بارد'];
+  var recordController = TextEditingController();
+  final BasketController controller = Get.put(BasketController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Stack(
               children: [
@@ -83,10 +88,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 Positioned(
                   left: 80.w,
                   child: InkWell(
-                    onTap: ()
-                    {
-                      Get.to(() => BasketShoppingScreen());
-
+                    onTap: () {
+                      Get.to(() => BasketScreen());
                     },
                     child: Container(
                       width: 50.w,
@@ -215,32 +218,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
               height: 13.h,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: CustomRadioButton(
-                    buttonLables: buttonList,
-                    buttonValues: buttonList,
-                    radioButtonValue: (value, index) {
-                      print("Button value " + value.toString());
-                      print("Integer value " + index.toString());
-                    },
-                    horizontal: true,
-                    enableShape: true,
-                    buttonSpace: 5,
-                    unselectedButtonBorderColor: Color(0XFF2D005D),
-                    buttonColor: Colors.white,
-                    selectedColor: Color(0XFF2D005D),
-                    buttonWidth: 150,
-                  ),
+                CustomRadioButton(
+                  buttonLables: buttonList,
+                  buttonValues: buttonList,
+                  buttonHeight: 50.h,
+                  buttonWidth: 160.w,
+                  fontSize: 18,
+                  radioButtonValue: (value, index) {
+                    controller
+                        .AddToCart(
+                        productModel: BasketModel(
+                            quantity: 1,
+                            productId: index,
+                            productName: value.toString()));
+
+                    showSnackBar(
+
+                        context: context,
+                        message: 'تم الإضافه إلى السلة بنجاح',
+                        error: false);
+                    print("Button value " + value.toString());
+                    print("Integer value " + index.toString());
+                  },
+                  horizontal: true,
+                  enableShape: true,
+                  buttonSpace: 5,
+                  unselectedButtonBorderColor: Color(0XFF2D005D),
+                  buttonColor: Colors.white,
+                  selectedColor: Color(0XFF2D005D),
                 ),
                 // Spacer(),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
+              padding: EdgeInsets.only(top: 25, left: 40.h, right: 40.h),
               child: defaultFormFeild0(
                 maxLines: 1,
                 inputType: TextInputType.text,

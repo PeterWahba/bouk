@@ -1,4 +1,5 @@
 import 'package:caffa/Models/User.dart';
+import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<UserData>> _futureuserData;
+  late int availableCups = 0;
+
   Future<List<UserData>> _loadUsers() async {
     try {
       QuerySnapshot querySnapshot =
@@ -221,8 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               horizontal: 23.w),
                                           child: Stack(
                                             children: [
-                                              Image.asset(
-                                                  "assets/bouk.jpg"),
+                                              Image.asset("assets/bouk.jpg"),
                                               Padding(
                                                 padding:
                                                     EdgeInsets.only(top: 11.h),

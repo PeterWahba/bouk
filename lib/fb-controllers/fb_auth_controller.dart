@@ -120,6 +120,7 @@ class FbAuthController with Helpers {
           .doc(userCredential.user!.uid)
           .set({
         'name': name,
+        'availableCups': 0,
         'email': email,
         'phone': phone,
         'company_name': company_name,
@@ -133,6 +134,7 @@ class FbAuthController with Helpers {
         "id": userCredential.user!.uid,
         "name": name,
         "phone": phone,
+        'availableCups': 0,
         "imageURL": imageURL,
         "email": email,
         "companyName": company_name,

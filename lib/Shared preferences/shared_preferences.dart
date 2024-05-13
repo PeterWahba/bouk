@@ -34,7 +34,8 @@ import '../Models/User.dart';
      sharedPreferences!.setString('name', user.name ?? "");
      sharedPreferences!.setString('email', user.email ?? "");
      sharedPreferences!.setString('phone', user.phone ?? "");
-     sharedPreferences!.setString('password', user.password ?? "");
+    sharedPreferences!.setString('password', user.password ?? "");
+    sharedPreferences!.setInt('availableCups', user.availableCups ?? 0);
   }
 
   UserData user() {
@@ -43,7 +44,8 @@ import '../Models/User.dart';
         name:  sharedPreferences!.getString('name')!,
         email:  sharedPreferences!.getString('email')!,
         password:  sharedPreferences!.getString('password')!,
-        phone:  sharedPreferences!.getString('phone')!);
+        phone:  sharedPreferences!.getString('phone')!,
+        availableCups: sharedPreferences!.getInt('availableCups')!);
 
     return user;
   }
@@ -57,6 +59,7 @@ import '../Models/User.dart';
 
   String get id =>  sharedPreferences!.getString('id') ?? '';
   String get email =>  sharedPreferences!.getString('email') ?? '';
+  int get availableCups =>  sharedPreferences!.getInt('availableCups') ?? 0;
 
   void handleClearPrefs() {
      sharedPreferences!.clear();

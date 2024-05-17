@@ -58,7 +58,11 @@ dependencies:
   dotted_line:
   add_to_cart_animation: ^2.0.3
   pretty_qr_code: ^3.3.0
+  qr_code_scanner: ^1.0.0
 
+  #  flutter_otp_text_field: ^1.1.3+2
+#  phone_form_field: ^9.2.3
+  otp_pin_field:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -33,18 +33,22 @@ import '../Models/User.dart';
     sharedPreferences!.setString('id', user.id ?? "");
      sharedPreferences!.setString('name', user.name ?? "");
      sharedPreferences!.setString('email', user.email ?? "");
-     sharedPreferences!.setString('phone', user.phone ?? "");
+     sharedPreferences!.setString('phoneNumber', user.phoneNumber ?? "");
     sharedPreferences!.setString('password', user.password ?? "");
+    sharedPreferences!.setString('userType', user.userType ?? "");
     sharedPreferences!.setInt('availableCups', user.availableCups ?? 0);
+    sharedPreferences!.setBool('isVerified', user.isVerified ?? false);
   }
 
   UserData user() {
     UserData user = new UserData(
         id:  sharedPreferences!.getString('id')!,
+        userType:  sharedPreferences!.getString('userType')!,
+        isVerified:  sharedPreferences!.getBool('isVerified')!,
         name:  sharedPreferences!.getString('name')!,
         email:  sharedPreferences!.getString('email')!,
         password:  sharedPreferences!.getString('password')!,
-        phone:  sharedPreferences!.getString('phone')!,
+        phoneNumber:  sharedPreferences!.getString('phoneNumber')!,
         availableCups: sharedPreferences!.getInt('availableCups')!);
 
     return user;
@@ -58,8 +62,12 @@ import '../Models/User.dart';
   }
 
   String get id =>  sharedPreferences!.getString('id') ?? '';
+  String get phoneNumber =>  sharedPreferences!.getString('phoneNumber') ?? '';
   String get email =>  sharedPreferences!.getString('email') ?? '';
+  String get userType =>  sharedPreferences!.getString('userType') ?? '';
+  String get name =>  sharedPreferences!.getString('name') ?? '';
   int get availableCups =>  sharedPreferences!.getInt('availableCups') ?? 0;
+  bool get isVerified =>  sharedPreferences!.getBool('isVerified') ?? false;
 
   void handleClearPrefs() {
      sharedPreferences!.clear();

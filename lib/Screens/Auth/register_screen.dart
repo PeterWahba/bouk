@@ -1,4 +1,11 @@
+import 'dart:async';
+
 import 'package:caffa/Screens/Auth/auth_screen.dart';
+import 'package:caffa/Screens/Auth/emaiVerifyScreen.dart';
+import 'package:caffa/Screens/Home/home_screen.dart';
+import 'package:caffa/Screens/Home_store/home_store_screen.dart';
+import 'package:caffa/Shared%20preferences/shared_preferences.dart';
+import 'package:caffa/fb-controllers/fb_auth_controller.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +15,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'OTPVerifyScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -22,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _passwordController;
+  late StreamSubscription stream;
 
   @override
   void initState() {
@@ -76,17 +86,22 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
             'name': _nameController.text,
             'email': _emailController.text,
             'password': _passwordController.text,
-            'id': user.uid
+            'id': user.uid,
+            'availableCups': 0,
+            'isVerified': false,
+            'userType': 'client',
+
             // Add any other user data you want to save
           });
           showSnackBar(
               context: context,
               message: 'Registration ٍSuccessfully.',
               error: false);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AuthScreen()),
-          );
+          _nameController.text = '';
+          _emailController.text = '';
+          _phoneController.text = '';
+          _passwordController.text = '';
+          login();
         }
       } catch (e) {
         showSnackBar(
@@ -595,5 +610,27 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
         ),
       ),
     );
+  }
+
+  Future<void> login() async {
+    bool status = await FbAuthController().signIn(
+        context: context,
+        email: _emailController.text,
+        password: _passwordController.text);
+    print(status);
+    if (status & AppSettingsPreferences().isVerified) {
+      stream = FbAuthController().checkUserStatus(({required bool loggedIn}) {
+        loggedIn
+            ? (AppSettingsPreferences().userType == 'client'
+                ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
+                : Get.off(() => HomeStoreScreen()))
+            : Get.to(() => AuthScreen());
+      });
+    } else if (status & !AppSettingsPreferences().isVerified) {
+      Get.to(() => OTPVerifyScreen());
+    } else {
+      showSnackBar(
+          context: context, message: 'خطأ ! برجاء أعد المحاوله', error: true);
+    }
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:caffa/Screens/Auth/auth_screen.dart';
 import 'package:caffa/Screens/Home/home_screen.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -11,12 +10,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-class VerifyScreen extends StatefulWidget {
+class EmailVerifyScreen extends StatefulWidget {
   @override
   _VerifyScreenState createState() => _VerifyScreenState();
 }
 
-class _VerifyScreenState extends State<VerifyScreen> with Helpers {
+class _VerifyScreenState extends State<EmailVerifyScreen> with Helpers {
   Future<void> verify() async {
     setState(() {
       state = 'loading';

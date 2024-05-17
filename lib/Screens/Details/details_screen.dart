@@ -1,10 +1,12 @@
 import 'package:caffa/Models/User.dart';
 import 'package:caffa/Screens/CheckOut/checkout_screen.dart';
 import 'package:caffa/Screens/basket/presentation/basket_screen.dart';
+import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/basket_controller/basket_controller.dart';
 import 'package:caffa/basket_controller/basket_model.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:caffa/widgets/def_formFeild.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -88,8 +90,20 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                 Positioned(
                   left: 80.w,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       Get.to(() => BasketScreen());
+
+                      // Step 1: Fetch user data from Firestore
+                      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(AppSettingsPreferences().id)
+                          .get();
+                      Map<String, dynamic> userData =
+                      userDataSnapshot.data() as Map<String, dynamic>;
+                      UserData user = UserData.fromMap(userData);
+                      AppSettingsPreferences().saveUser(user: user);
+
+
                     },
                     child: Container(
                       width: 50.w,
@@ -227,15 +241,13 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                   buttonWidth: 160.w,
                   fontSize: 18,
                   radioButtonValue: (value, index) {
-                    controller
-                        .AddToCart(
+                    controller.AddToCart(
                         productModel: BasketModel(
                             quantity: 1,
                             productId: index,
                             productName: value.toString()));
 
                     showSnackBar(
-
                         context: context,
                         message: 'تم الإضافه إلى السلة بنجاح',
                         error: false);

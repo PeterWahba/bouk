@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:caffa/Screens/Auth/verifyScreen.dart';
+import 'package:caffa/Screens/Auth/emaiVerifyScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../Models/User.dart';
@@ -25,7 +26,6 @@ class FbAuthController with Helpers {
       UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
-        if (userCredential.user!.emailVerified) {
           // Step 1: Fetch user data from Firestore
           DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
               .collection('users')
@@ -36,8 +36,10 @@ class FbAuthController with Helpers {
           UserData user = UserData.fromMap(userData);
           user.id = userCredential.user!.uid;
           print(user.id);
+          print(AppSettingsPreferences().isVerified.toString());
           AppSettingsPreferences().saveUser(user: user);
           return true;
+
         } else {
           // await signOut();
           showSnackBar(
@@ -46,7 +48,6 @@ class FbAuthController with Helpers {
               error: true);
           return false;
         }
-      }
       return false;
     } on FirebaseAuthException catch (e) {
       _controlException(context, e);
@@ -103,7 +104,7 @@ class FbAuthController with Helpers {
     required BuildContext context,
     required String name,
     required String email,
-    required String phone,
+    required String phoneNumber,
     required String company_name,
     required String password,
     required String token,
@@ -122,7 +123,7 @@ class FbAuthController with Helpers {
         'name': name,
         'availableCups': 0,
         'email': email,
-        'phone': phone,
+        'phoneNumber': phoneNumber,
         'company_name': company_name,
         'password': password,
         'imageURL': imageURL,
@@ -133,7 +134,7 @@ class FbAuthController with Helpers {
       Map<String, dynamic> userdata = {
         "id": userCredential.user!.uid,
         "name": name,
-        "phone": phone,
+        "phoneNumber": phoneNumber,
         'availableCups': 0,
         "imageURL": imageURL,
         "email": email,
@@ -157,7 +158,7 @@ class FbAuthController with Helpers {
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
     await AppSettingsPreferences().updateLoggedIn();
-    Get.off(AuthScreen());
+    Get.off(() => AuthScreen(), transition: Transition.cupertino);
   }
 
   Future<bool> forgetPassword(

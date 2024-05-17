@@ -1,6 +1,9 @@
+import 'package:caffa/Models/User.dart';
+import 'package:caffa/Screens/Details/details_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/basket_controller/basket_controller.dart';
 import 'package:caffa/utils/helpers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,6 +14,7 @@ import 'basket_salary.dart';
 
 class BasketSection extends StatefulWidget with Helpers {
   BasketSection({Key? key, required this.firstCategoryName}) : super(key: key);
+  final BasketController controller = Get.put(BasketController());
 
   final String firstCategoryName;
 
@@ -21,8 +25,42 @@ class BasketSection extends StatefulWidget with Helpers {
 class _BasketSectionState extends State<BasketSection> {
   final BasketController controller = Get.put(BasketController());
 
+  Future _loadUserData() async {
+    int availableCups = AppSettingsPreferences().availableCups;
+
+    Future.delayed(Duration(seconds: 5)).then((value) async {
+      // Step 1: Fetch user data from Firestore
+      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(AppSettingsPreferences().id)
+          .get();
+      Map<String, dynamic> userData =
+          userDataSnapshot.data() as Map<String, dynamic>;
+      UserData user = UserData.fromMap(userData);
+      setState(() {
+        AppSettingsPreferences().saveUser(user: user);
+      });
+      print(AppSettingsPreferences().availableCups);
+      if (availableCups != AppSettingsPreferences().availableCups){
+        print('object');
+        Get.to(DetailsScreen(userData: user));
+        controller.deleteCartProducts(context);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initSta
+    //  te
+    super.initState();
+    _loadUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _loadUserData();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Column(
@@ -46,7 +84,9 @@ class _BasketSectionState extends State<BasketSection> {
                       builder: (_) {
                         return alertDialog(
                           imageSrc: 'assets/failed.json',
-                          text: 'رصيدك الحالى من الأكواب لا يكفي من فضلك قم بشراء بطاقة أكواب جديدة', isQRCode: false,
+                          text:
+                              'رصيدك الحالى من الأكواب لا يكفي من فضلك قم بشراء بطاقة أكواب جديدة',
+                          isQRCode: false,
                         );
                       });
                 } else
@@ -55,7 +95,8 @@ class _BasketSectionState extends State<BasketSection> {
                       builder: (_) {
                         return alertDialog(
                           imageSrc: 'assets/coffe.png',
-                          text: 'قم بالإسترداد فى المقهى', isQRCode: true,
+                          text: 'قم بالإسترداد فى المقهى',
+                          isQRCode: true,
                         );
                       });
               },

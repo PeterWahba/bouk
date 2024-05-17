@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:caffa/Screens/Auth/register_screen.dart';
 import 'package:caffa/Screens/Auth/reset_pass_screen.dart';
-import 'package:caffa/Screens/Auth/verifyScreen.dart';
+import 'package:caffa/Screens/Auth/emaiVerifyScreen.dart';
+import 'package:caffa/Screens/Home_store/home_store_screen.dart';
+import 'package:caffa/Shared%20preferences/shared_preferences.dart';
+import 'package:caffa/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -13,6 +16,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../fb-controllers/fb_auth_controller.dart';
 import '../Coffee/Auth/auth_screen.dart';
 import '../Home/home_screen.dart';
+import 'OTPVerifyScreen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -21,7 +25,7 @@ class AuthScreen extends StatefulWidget {
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends State<AuthScreen> with Helpers {
   late StreamSubscription stream;
 
   late TextEditingController _emailcontroller;
@@ -57,7 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   height: 140.h,
                 ),
                 Text(
-                  "مرحبا بك في  Book",
+                  "مرحبا بك في  Bouk",
                   style: GoogleFonts.almarai(
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
@@ -355,12 +359,17 @@ class _AuthScreenState extends State<AuthScreen> {
         email: _emailcontroller.text,
         password: _passwordcontroller.text);
     print(status);
-    if (status) {
-    stream = FbAuthController().checkUserStatus(({required bool loggedIn}) {
-      loggedIn ? Get.to(() => HomeScreen()) : Get.to(() => AuthScreen());
-    });
+    if (status & AppSettingsPreferences().isVerified) {
+      stream = FbAuthController().checkUserStatus(({required bool loggedIn}) {
+        loggedIn ? (AppSettingsPreferences().userType == 'client'
+            ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
+            : Get.off(() => HomeStoreScreen())) : Get.to(() => AuthScreen());
+      });
+    } else if (status & !AppSettingsPreferences().isVerified) {
+      Get.to(() => OTPVerifyScreen());
     } else {
-      Get.to(() => VerifyScreen());
+      showSnackBar(
+          context: context, message: 'خطأ ! برجاء أعد المحاوله', error: true);
     }
   }
 }

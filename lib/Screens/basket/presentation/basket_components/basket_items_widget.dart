@@ -2,6 +2,7 @@ import 'package:caffa/basket_controller/basket_controller.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class Basket extends StatefulWidget {
   Basket(
@@ -41,7 +42,7 @@ class _BasketState extends State<Basket> with Helpers {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(25),
-              child: Image.asset(
+              child: Lottie.asset(
                 '${widget.imageSrc}',
                 width: 80,
                 height: 120,

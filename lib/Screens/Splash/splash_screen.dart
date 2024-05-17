@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:caffa/Screens/Auth/auth_screen.dart';
 import 'package:caffa/Screens/Home/home_screen.dart';
+import 'package:caffa/Screens/Home_store/home_store_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Timer(const Duration(milliseconds: 1000), () {
         if (this.mounted) {
           setState(() {
-            // _controller.setVolume(0);
+            _controller.setVolume(0);
             // _controller.setPlaybackSpeed(2.0);
             _controller.play();
             _visible = true;
@@ -44,7 +45,10 @@ class _SplashScreenState extends State<SplashScreen> {
       if (AppSettingsPreferences().id != '') {
         // Get.off(() => AuthScreen(), transition: Transition.cupertino);
 
-        Get.off(() => HomeScreen(), transition: Transition.cupertino);
+        AppSettingsPreferences().userType == 'client'
+            ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
+            : Get.off(() => HomeStoreScreen(),
+                transition: Transition.cupertino);
       } else
         Get.off(() => AuthScreen(), transition: Transition.cupertino);
     });

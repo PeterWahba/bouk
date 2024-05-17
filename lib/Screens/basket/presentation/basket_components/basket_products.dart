@@ -27,7 +27,7 @@ class _BasketProductsState extends State<BasketProducts> {
       itemBuilder: (BuildContext context, int index) {
         return  Basket(
           categoriesName: controller.basketProducts[index].productName.toString(),
-          imageSrc: 'assets/coffe.png',
+          imageSrc: 'assets/coffeCup.json',
           index: index,
 
         );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:caffa/Screens/Auth/register_screen.dart';
 import 'package:caffa/Screens/Auth/reset_pass_screen.dart';
 import 'package:caffa/Screens/Auth/emaiVerifyScreen.dart';
+import 'package:caffa/Screens/Coffee/Auth/register_screen.dart';
 import 'package:caffa/Screens/Home_store/home_store_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/utils/helpers.dart';
@@ -308,7 +309,7 @@ class _AuthScreenState extends State<AuthScreen> with Helpers {
                 ),
                 InkWell(
                   onTap: () {
-                    Get.to(() => AuthScreenCoffee());
+                    Get.to(() => RegisterScreenCoffee());
                   },
                   child: Text(
                     "تسجيل دخول كمقهى",
@@ -359,14 +360,14 @@ class _AuthScreenState extends State<AuthScreen> with Helpers {
         email: _emailcontroller.text,
         password: _passwordcontroller.text);
     print(status);
-    if (status & AppSettingsPreferences().isVerified) {
+    if (status && AppSettingsPreferences().isVerified) {
       stream = FbAuthController().checkUserStatus(({required bool loggedIn}) {
         loggedIn ? (AppSettingsPreferences().userType == 'client'
             ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
             : Get.off(() => HomeStoreScreen())) : Get.to(() => AuthScreen());
       });
-    } else if (status & !AppSettingsPreferences().isVerified) {
-      Get.to(() => OTPVerifyScreen());
+    } else if (status && !AppSettingsPreferences().isVerified) {
+      Get.to(() => EmailVerifyScreen());
     } else {
       showSnackBar(
           context: context, message: 'خطأ ! برجاء أعد المحاوله', error: true);

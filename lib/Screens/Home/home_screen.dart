@@ -1,5 +1,6 @@
 import 'package:caffa/Models/User.dart';
-import 'package:caffa/Shared%20preferences/shared_preferences.dart';
+import 'package:caffa/Screens/Auth/auth_screen.dart';
+import 'package:caffa/Screens/settings/settings.dart';
 import 'package:caffa/fb-controllers/fb_auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -111,46 +112,59 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                          IconButton(
-                              icon: Icon(Icons.logout_outlined,color: Colors.red,),
-
-                              onPressed: () => {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      elevation: 24.0,
-                                      title: Text('هل أنت متأكد ؟',
-                                          style: TextStyle(
-                                              color: Colors.black)),
-                                      content: Text('سوف تقوم بتسجيل الخروج من حسابكم',
-                                          style: TextStyle(
-                                              color: Colors.black)),
-                                      actions: [
-                                        CupertinoDialogAction(
-                                          child: Container(
-                                            child: Text(
-                                              'تسجيل الخروج',
-                                              style: TextStyle(
-                                                  color: Colors.red),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            FbAuthController()
-                                                .signOut();
-
-                                          },
-                                        ),
-                                        CupertinoDialogAction(
-                                          child: Text('إلغاء'),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    ))
-                              }),
-                          Image.asset("assets/Group 3147.png"),
-
+                          Padding(
+                            padding:  EdgeInsets.only(right: 30.0.w),
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.logout_outlined,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                                onPressed: () => {
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                                elevation: 24.0,
+                                                title: Text('هل أنت متأكد ؟',
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
+                                                content: Text(
+                                                    'سوف تقوم بتسجيل الخروج من حسابكم',
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
+                                                actions: [
+                                                  CupertinoDialogAction(
+                                                    child: Container(
+                                                      child: Text(
+                                                        'تسجيل الخروج',
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      FbAuthController()
+                                                          .signOut();
+                                                    },
+                                                  ),
+                                                  CupertinoDialogAction(
+                                                    child: Text('إلغاء'),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              ))
+                                    }),
+                          ),
+                          InkWell(
+                              onTap: ()
+                              {
+                                Get.to(() => SettingsScreen());                              },
+                              child: Icon(
+                                Icons.settings_outlined,
+                                color: Colors.white,
+                                size: 30,
+                              )),
                         ],
                       ),
                       SizedBox(

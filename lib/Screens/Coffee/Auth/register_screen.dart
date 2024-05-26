@@ -81,7 +81,9 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
             'name': _nameController.text,
             'email': _emailController.text,
             'password': _passwordController.text,
-            'id': user.uid
+            'id': user.uid,
+            'userType': 'store',
+
             // Add any other user data you want to save
           });
           Navigator.pushReplacement(
@@ -518,7 +520,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                     style: GoogleFonts.almarai(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: Color(0XFF020202),
+                      color: Colors.white,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -636,7 +638,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                 ),
                 InkWell(
                   onTap: () {
-                    Get.to(() => AuthScreenCoffee(),
+                    Get.to(() => AuthScreen(),
                         transition: Transition.circularReveal);
                   },
                   child: RichText(

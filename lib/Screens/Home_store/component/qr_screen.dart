@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:caffa/Screens/Home/data/QR_model.dart';
+import 'package:caffa/Screens/Home_store/data/QR_model.dart';
 import 'package:caffa/Screens/Home_store/home_store_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/utils/helpers.dart';

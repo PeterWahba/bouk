@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:caffa/Screens/Home/home_screen.dart';
+import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/utils/helpers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,6 +59,13 @@ class _VerifyScreenState extends State<EmailVerifyScreen> with Helpers {
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
           );
+          // change isVerified to True
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(AppSettingsPreferences().id)
+              .update({
+            'isVerified': true,
+          });
           timer.cancel();
         }
       });

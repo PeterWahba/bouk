@@ -1,5 +1,5 @@
 import 'package:caffa/Models/User.dart';
-import 'package:caffa/Screens/Home/component/qr_screen.dart';
+import 'package:caffa/Screens/Home_store/component/qr_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/fb-controllers/fb_auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

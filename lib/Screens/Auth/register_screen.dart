@@ -93,15 +93,16 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
 
             // Add any other user data you want to save
           });
+          login().then((value) {
+            _nameController.text = '';
+            _emailController.text = '';
+            _phoneController.text = '';
+            _passwordController.text = '';
+          });
           showSnackBar(
               context: context,
               message: 'Registration ٍSuccessfully.',
               error: false);
-          _nameController.text = '';
-          _emailController.text = '';
-          _phoneController.text = '';
-          _passwordController.text = '';
-          login();
         }
       } catch (e) {
         showSnackBar(
@@ -618,16 +619,14 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
         email: _emailController.text,
         password: _passwordController.text);
     print(status);
-    if (status & AppSettingsPreferences().isVerified) {
+    if (status && AppSettingsPreferences().isVerified) {
       stream = FbAuthController().checkUserStatus(({required bool loggedIn}) {
         loggedIn
-            ? (AppSettingsPreferences().userType == 'client'
-                ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
-                : Get.off(() => HomeStoreScreen()))
+            ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
             : Get.to(() => AuthScreen());
       });
-    } else if (status & !AppSettingsPreferences().isVerified) {
-      Get.to(() => OTPVerifyScreen());
+    } else if (status && !AppSettingsPreferences().isVerified) {
+      Get.to(() => EmailVerifyScreen());
     } else {
       showSnackBar(
           context: context, message: 'خطأ ! برجاء أعد المحاوله', error: true);

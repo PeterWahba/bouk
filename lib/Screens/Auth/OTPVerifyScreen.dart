@@ -140,7 +140,7 @@ class _VerifyScreenState extends State<OTPVerifyScreen> with Helpers {
                     'حسابك ليس مفعل',
                     style: GoogleFonts.lato(
                       color: Colors.redAccent,
-                      textStyle: Theme.of(context).textTheme.headline4,
+                      textStyle: Theme.of(context).textTheme.headlineMedium,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.italic,

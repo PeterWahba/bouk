@@ -22,8 +22,7 @@ Future<void> main() async {
       //     appId: "1:319946119347:web:429bb5781c6b590e3f78c6",
       //     measurementId: "G-6TRBSKF1BG")
   );
-  runApp(DevicePreview(enabled: !kReleaseMode,
-      builder: (context) => MyApp()));}
+  runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

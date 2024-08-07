@@ -40,7 +40,7 @@ Widget defaultFormFeild({
   obscureText: isObsecured,
   decoration: InputDecoration(
     labelStyle: GoogleFonts.lato(
-      textStyle: Theme.of(context).textTheme.headline4,
+      textStyle: Theme.of(context).textTheme.headlineMedium,
       fontSize: 22,
       color: color,
       fontWeight: FontWeight.w700,

@@ -473,105 +473,112 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                 SizedBox(
                   height: 18.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 1.h,
-                      width: 93.w,
-                      color: Color(0XFFD9D9BC),
-                    ),
-                    SizedBox(
-                      width: 23.w,
-                    ),
-                    Text(
-                      "أو الاستمرار مع",
-                      style: GoogleFonts.almarai(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0XFFBCBCBC),
+                Visibility(
+                  visible: false,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 1.h,
+                            width: 93.w,
+                            color: Color(0XFFD9D9BC),
+                          ),
+                          SizedBox(
+                            width: 23.w,
+                          ),
+                          Text(
+                            "أو الاستمرار مع",
+                            style: GoogleFonts.almarai(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0XFFBCBCBC),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 23.w,
+                          ),
+                          Container(
+                            height: 1.h,
+                            width: 93.w,
+                            color: Color(0XFFD9D9BC),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 23.w,
-                    ),
-                    Container(
-                      height: 1.h,
-                      width: 93.w,
-                      color: Color(0XFFD9D9BC),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 18.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 35.h,
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(53.r),
-                        border: Border.all(
-                          color: Color(0XFFEDEDED),
-                        ),
+                      SizedBox(
+                        height: 18.h,
                       ),
-                      child: Center(
-                        child: Image.asset(
-                          "assets/Rectangle 9 (2).png",
-                          width: 25.w,
-                          height: 25.h,
-                          fit: BoxFit.scaleDown,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 35.h,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(53.r),
+                              border: Border.all(
+                                color: Color(0XFFEDEDED),
+                              ),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/Rectangle 9 (2).png",
+                                width: 25.w,
+                                height: 25.h,
+                                fit: BoxFit.scaleDown,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 23.w,
+                          ),
+                          Container(
+                            height: 35.h,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(53.r),
+                              border: Border.all(
+                                color: Color(0XFFEDEDED),
+                              ),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/Rectangle 9.png",
+                                width: 25.w,
+                                height: 25.h,
+                                fit: BoxFit.scaleDown,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 23.w,
+                          ),
+                          Container(
+                            height: 35.h,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(53.r),
+                              border: Border.all(
+                                color: Color(0XFFEDEDED),
+                              ),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/Rectangle 9 (3).png",
+                                width: 25.w,
+                                height: 25.h,
+                                fit: BoxFit.scaleDown,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 23.w,
-                    ),
-                    Container(
-                      height: 35.h,
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(53.r),
-                        border: Border.all(
-                          color: Color(0XFFEDEDED),
-                        ),
+                      SizedBox(
+                        height: 25.h,
                       ),
-                      child: Center(
-                        child: Image.asset(
-                          "assets/Rectangle 9.png",
-                          width: 25.w,
-                          height: 25.h,
-                          fit: BoxFit.scaleDown,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 23.w,
-                    ),
-                    Container(
-                      height: 35.h,
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(53.r),
-                        border: Border.all(
-                          color: Color(0XFFEDEDED),
-                        ),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          "assets/Rectangle 9 (3).png",
-                          width: 25.w,
-                          height: 25.h,
-                          fit: BoxFit.scaleDown,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 25.h,
+                    ],
+                  ),
                 ),
                 InkWell(
                   onTap: () {

@@ -116,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with Helpers {
                   'تعديل بيانات الحساب',
                   style: GoogleFonts.lato(
                     color: Colors.black,
-                    textStyle: Theme.of(context).textTheme.headline4,
+                    textStyle: Theme.of(context).textTheme.headlineMedium,
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.italic,

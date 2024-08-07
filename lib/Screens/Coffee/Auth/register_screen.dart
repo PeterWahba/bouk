@@ -536,36 +536,38 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                 SizedBox(
                   height: 18.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Column(
                   children: [
-                    Container(
-                      height: 1.h,
-                      width: 93.w,
-                      color: Color(0XFFD9D9BC),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 1.h,
+                          width: 93.w,
+                          color: Color(0XFFD9D9BC),
+                        ),
+                        SizedBox(
+                          width: 23.w,
+                        ),
+                        Text(
+                          "أو الاستمرار مع",
+                          style: GoogleFonts.almarai(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0XFFBCBCBC),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 23.w,
+                        ),
+                        Container(
+                          height: 1.h,
+                          width: 93.w,
+                          color: Color(0XFFD9D9BC),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 23.w,
-                    ),
-                    Text(
-                      "أو الاستمرار مع",
-                      style: GoogleFonts.almarai(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0XFFBCBCBC),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 23.w,
-                    ),
-                    Container(
-                      height: 1.h,
-                      width: 93.w,
-                      color: Color(0XFFD9D9BC),
-                    ),
-                  ],
-                ),
-                SizedBox(
+                   SizedBox(
                   height: 18.h,
                 ),
                 Row(
@@ -636,6 +638,11 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                 SizedBox(
                   height: 25.h,
                 ),
+            
+            
+                  ],
+                ),
+           
                 InkWell(
                   onTap: () {
                     Get.to(() => AuthScreen(),

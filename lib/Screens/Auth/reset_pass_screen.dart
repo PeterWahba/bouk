@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:caffa/fb-controllers/fb_auth_controller.dart';
+import 'package:caffa/utils/custom_themes.dart';
+import 'package:caffa/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,9 +29,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('نسيت كلمة السر'),
-      ),
+      appBar: CustomAppBar(context: context, title: 'نسيت كلمة السر', isHomeScreen: false),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -43,11 +43,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   height: 100.h,
                 ),
                 Center(
-                  child: Lottie.asset('assets/forgetPass.json'),
+                  child: Lottie.asset('assets/forgetPass.json',height: 250),
                 ),
 
                 SizedBox(
-                  height: 20.h,
+                  height: 60.h,
                 ),
 
 
@@ -68,7 +68,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       contentPadding: const EdgeInsets.all(18),
                       counterText: "",
                       labelText: "example@gmail.com",
-                      labelStyle: GoogleFonts.almarai(
+                      labelStyle:titilliumRegular.copyWith(
                           color: Color(0XFF000000).withOpacity(.3),
                           fontSize: 14.sp),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -100,7 +100,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   },
                   child: Text(
                     "إعادة تعيين كلمة السر",
-                    style: GoogleFonts.almarai(
+                    style: titilliumRegular.copyWith(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

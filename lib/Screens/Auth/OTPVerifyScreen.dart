@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'package:caffa/Screens/Auth/auth_screen.dart';
 import 'package:caffa/Screens/Home/home_screen.dart';
+import 'package:caffa/Screens/Home_store/home_store_screen.dart';
+import 'package:caffa/Screens/dashboard/dashboard_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
+import 'package:caffa/fb-controllers/fb_auth_controller.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +29,8 @@ class OTPVerifyScreen extends StatefulWidget {
 }
 
 class _VerifyScreenState extends State<OTPVerifyScreen> with Helpers {
+  late StreamSubscription stream;
+
   // Future<void> verify() async {
   //   setState(() {
   //     state = 'loading';
@@ -41,7 +48,7 @@ class _VerifyScreenState extends State<OTPVerifyScreen> with Helpers {
   //                 CupertinoDialogAction(
   //                   child: const Text(
   //                     'Ok',
-  //                     style: TextStyle(fontWeight: FontWeight.bold),
+  //                     style: titilliumRegular.copyWith(fontWeight: FontWeight.bold),
   //                   ),
   //                   onPressed: () {
   //                     setState(() {});
@@ -140,7 +147,6 @@ class _VerifyScreenState extends State<OTPVerifyScreen> with Helpers {
                     'حسابك ليس مفعل',
                     style: GoogleFonts.lato(
                       color: Colors.redAccent,
-                      textStyle: Theme.of(context).textTheme.headlineMedium,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.italic,
@@ -171,7 +177,7 @@ class _VerifyScreenState extends State<OTPVerifyScreen> with Helpers {
                       Text(
                         'أدخل 6 أرقام التي تم إرسالها إلى ${widget._contact} ',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style:  titilliumRegular.copyWith(
                           fontSize: 18,
                           color: Colors.black,
                         ),
@@ -301,7 +307,12 @@ class _VerifyScreenState extends State<OTPVerifyScreen> with Helpers {
               'isVerified': true,
             });
 
-            Get.to(() => HomeScreen());
+            stream = FbAuthController().checkUserStatus(({required bool loggedIn}) {
+              loggedIn ? (AppSettingsPreferences().userType == 'client'
+                  ? Get.offAll(() => DashBoardScreen(), transition: Transition.cupertino)
+                  : Get.offAll(() => HomeStoreScreen())) : Get.to(() => AuthScreen());
+            });
+            Get.to(() => DashBoardScreen());
           }
         }
       } else

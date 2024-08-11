@@ -1,3 +1,4 @@
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -80,7 +81,7 @@ class _DetailsScreenCoffeeState extends State<DetailsScreenCoffee> {
                 ),
                 Text(
                   "COFFEE ADDICTS",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 18.w,
                     fontWeight: FontWeight.bold,
                   ),
@@ -88,7 +89,7 @@ class _DetailsScreenCoffeeState extends State<DetailsScreenCoffee> {
                 Spacer(),
                 Text(
                   "معلومات المقهى",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 16.sp,
                     color: Color(0XFF2D005D),
                   ),
@@ -105,7 +106,7 @@ class _DetailsScreenCoffeeState extends State<DetailsScreenCoffee> {
                 ),
                 Text(
                   "أحلى مقهى قريب منك.",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 16.w,
                     color: Color(0XFFA8A8A8),
                   ),
@@ -113,7 +114,7 @@ class _DetailsScreenCoffeeState extends State<DetailsScreenCoffee> {
                 Spacer(),
                 Text(
                   "تعليقات",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 16.sp,
                     color: Color(0XFF2D005D),
                   ),
@@ -138,7 +139,7 @@ class _DetailsScreenCoffeeState extends State<DetailsScreenCoffee> {
                 ),
                 Text(
                   "4.9",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 15.w,
                     color: Color(0XFFFFA800),
                   ),
@@ -156,7 +157,7 @@ class _DetailsScreenCoffeeState extends State<DetailsScreenCoffee> {
                 ),
                 Text(
                   "مفتوح حتى الساعة 2:30 صباحًا",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 14.w,
                     color: Color(0XFFA8A8A8),
                   ),

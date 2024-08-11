@@ -4,6 +4,7 @@ import 'package:caffa/Screens/Home_store/data/QR_model.dart';
 import 'package:caffa/Screens/Home_store/home_store_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/utils/helpers.dart';
+import 'package:caffa/widgets/custom_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,9 +33,7 @@ class _QRScanScreenState extends State<QRScanScreen> with Helpers {
             : 350.0;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('طلب جديد'),
-      ),
+      appBar: CustomAppBar(context: context, title: 'طلب جديد', isHomeScreen: false),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -78,23 +77,43 @@ class _QRScanScreenState extends State<QRScanScreen> with Helpers {
       if (qrModel.availableCups != '0') {
         showSnackBar(context: context, message: qrModel.orderCups!);
         //update client availableCups number
-        int x =
-            int.parse(qrModel.availableCups!) - int.parse(qrModel.orderCups!);
+        int x = int.parse(qrModel.availableCups!) - int.parse(qrModel.orderCups!);
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(qrModel.id.toString())
+        //     .update({
+        //   'availableCups': x,
+        // });
+        // //update store TotalCups number
+        int y = AppSettingsPreferences().availableCups + int.parse(qrModel.orderCups!);
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(AppSettingsPreferences().id)
+        //     .update({
+        //   'availableCups': y,
+        // });
+
+
+
         await FirebaseFirestore.instance
-            .collection('users')
+            .collection('stores')
             .doc(qrModel.id.toString())
-            .update({
-          'availableCups': x,
-        });
-        //update store TotalCups number
-        int y = AppSettingsPreferences().availableCups +
-            int.parse(qrModel.orderCups!);
-        await FirebaseFirestore.instance
-            .collection('users')
+            .collection('clients')
             .doc(AppSettingsPreferences().id)
             .update({
           'availableCups': y,
         });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(AppSettingsPreferences().id)
+            .collection('stores')
+            .doc(qrModel.id.toString())
+            .update({
+          'availableCups':x,
+
+        });
+
+
         Get.to(HomeStoreScreen());
       }
     });

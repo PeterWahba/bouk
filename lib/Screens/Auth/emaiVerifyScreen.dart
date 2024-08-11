@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:caffa/Screens/Home/home_screen.dart';
+import 'package:caffa/Screens/Home_store/home_store_screen.dart';
+import 'package:caffa/Screens/dashboard/dashboard_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -9,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -55,10 +59,15 @@ class _VerifyScreenState extends State<EmailVerifyScreen> with Helpers {
         print(FirebaseAuth.instance.currentUser!.emailVerified);
         // do something or call a function
         if (FirebaseAuth.instance.currentUser!.emailVerified == true) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => HomeScreen()),
+          // );
+
+          AppSettingsPreferences().userType == 'client'
+              ? Get.offAll(() => DashBoardScreen(), transition: Transition.cupertino)
+              : Get.offAll(() => HomeStoreScreen());
+
           // change isVerified to True
           await FirebaseFirestore.instance
               .collection('users')
@@ -109,9 +118,8 @@ class _VerifyScreenState extends State<EmailVerifyScreen> with Helpers {
                   ),
                   Text(
                     'حسابك ليس مفعل',
-                    style: GoogleFonts.lato(
+                    style: titilliumRegular.copyWith(
                       color: Colors.redAccent,
-                      textStyle: Theme.of(context).textTheme.headlineMedium,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.italic,

@@ -1,3 +1,4 @@
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -18,14 +19,14 @@ class OfflineWidget extends StatelessWidget {
             SizedBox(height: 80.h),
             Text(
               "لا يوجد اتصال بالإنترنت",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: titilliumBold,
             ),
             SizedBox(height: 40.h),
             Text(
               "فشل الاتصال بالإنترنت، يرجى التحقق من اتصال شبكة هاتفك",
               maxLines: 3,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelLarge,
+              style: titilliumRegular,
             )
           ],
         ),

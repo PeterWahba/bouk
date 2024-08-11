@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:caffa/Screens/Auth/auth_screen.dart';
 import 'package:caffa/Screens/Home/home_screen.dart';
 import 'package:caffa/Screens/Home_store/home_store_screen.dart';
+import 'package:caffa/Screens/SuperAdmin/suber_admin_screen.dart';
+import 'package:caffa/Screens/dashboard/dashboard_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,14 +43,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(Duration(seconds: 4), () {
       // Get.off(() => AuthScreen(), transition: Transition.cupertino);
+      if(AppSettingsPreferences().userType == 'superAdmin')
+      {
+        Get.offAll(() => SuperAdminScreen(), transition: Transition.cupertino);
 
-      if (AppSettingsPreferences().id != '') {
+      }
+      else if (AppSettingsPreferences().id != '') {
         // Get.off(() => AuthScreen(), transition: Transition.cupertino);
 
         AppSettingsPreferences().userType == 'client'
-            ? Get.off(() => HomeScreen(), transition: Transition.cupertino)
-            : Get.off(() => HomeStoreScreen(),
+            ? Get.offAll(() => DashBoardScreen(),
+                transition: Transition.cupertino)
+            : Get.offAll(() => HomeStoreScreen(),
                 transition: Transition.cupertino);
+      } else if (AppSettingsPreferences().isGuest) {
+        Get.offAll(() => DashBoardScreen(), transition: Transition.cupertino);
       } else
         Get.off(() => AuthScreen(), transition: Transition.cupertino);
     });

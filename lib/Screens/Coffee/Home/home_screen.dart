@@ -1,4 +1,5 @@
 import 'package:caffa/Models/User.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,7 +79,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                           children: [
                             Text(
                               "موقع المقهى:",
-                              style: GoogleFonts.almarai(
+                              style: titilliumRegular.copyWith(
                                 fontSize: 12.sp,
                                 color: Color(0XFFB7B7B7),
                               ),
@@ -87,7 +88,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                               children: [
                                 Text(
                                   "Al Madinah, Saudi Arabia",
-                                  style: GoogleFonts.almarai(
+                                  style: titilliumRegular.copyWith(
                                     fontSize: 14.sp,
                                     color: Color(0XFFFFFFFF),
                                     fontWeight: FontWeight.bold,
@@ -138,7 +139,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       contentPadding: const EdgeInsets.all(18),
                       counterText: "",
                       labelText: "البحث ",
-                      labelStyle: GoogleFonts.almarai(
+                      labelStyle: titilliumRegular.copyWith(
                           color: Color(0XFF989898), fontSize: 14.sp),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
 
@@ -168,7 +169,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
               padding: EdgeInsets.only(right: 29.w),
               child: Text(
                 "التحليلات",
-                style: GoogleFonts.almarai(
+                style: titilliumRegular.copyWith(
                   fontSize: 24.w,
                 ),
               ),
@@ -193,7 +194,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                     children: [
                       Text(
                         "280%",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 24.w,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -201,7 +202,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "نمو المبيعات",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 20.w,
                           color: Colors.white,
                         ),
@@ -226,7 +227,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                     children: [
                       Text(
                         "1200+",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 24.w,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -234,7 +235,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "طلبات جديدة",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 20.w,
                           color: Colors.white,
                         ),
@@ -251,7 +252,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
               padding: EdgeInsets.only(right: 29.w),
               child: Text(
                 "تحكم في المقهى",
-                style: GoogleFonts.almarai(
+                style: titilliumRegular.copyWith(
                   fontSize: 24.w,
                 ),
               ),
@@ -286,7 +287,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                         ),
                         Text(
                           "بروفايل المقهى",
-                          style: GoogleFonts.almarai(
+                          style: titilliumRegular.copyWith(
                             fontSize: 16.w,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -297,7 +298,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                         ),
                         Text(
                           "اكتشف الخصائص والأصول الفريدة لعروض القهوة لدينا.",
-                          style: GoogleFonts.almarai(
+                          style: titilliumRegular.copyWith(
                             fontSize: 10.w,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -330,7 +331,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "مينو المقهى",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 16.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -341,7 +342,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "تصفح مجموعتنا المتنوعة من إبداعات وتخصصات القهوة المصنوعة يدويًا.",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 10.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -378,7 +379,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "طلبات المقهى",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 16.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -389,7 +390,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "ضع خلطات القهوة المفضلة لديك بكل سهولة وراحة.",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 10.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -421,7 +422,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "عملاء المقهى",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 16.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -432,7 +433,7 @@ class _HomeScreenCoffeeState extends State<HomeScreenCoffee> {
                       ),
                       Text(
                         "تواصل مع عشاق القهوة الكرام وأفراد المجتمع.",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 10.w,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

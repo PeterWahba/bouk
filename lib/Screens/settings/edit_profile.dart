@@ -1,5 +1,6 @@
 import 'package:caffa/Models/User.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -8,7 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
-import 'components/components.dart';
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/components.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -79,29 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with Helpers {
     phoneController.text = AppSettingsPreferences().phoneNumber;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.white,
-            )),
-        backgroundColor: Color(0XFF313131),
-        title: Text(
-          'الإعدادات',
-          style: TextStyle(color: Colors.white),
-        ),
-        elevation: 10,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Icon(
-              Icons.settings_outlined,
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
+      appBar: CustomAppBar(context: context, title: 'الإعدادات', isHomeScreen: false),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -114,12 +94,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> with Helpers {
                 ),
                 Text(
                   'تعديل بيانات الحساب',
-                  style: GoogleFonts.lato(
+                  style: titilliumRegular.copyWith(
                     color: Colors.black,
-                    textStyle: Theme.of(context).textTheme.headlineMedium,
-                    fontSize: 30,
+                    fontSize: 25.sp,
                     fontWeight: FontWeight.w700,
-                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 SizedBox(

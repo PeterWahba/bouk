@@ -1,9 +1,12 @@
+import 'package:caffa/Models/Store.dart';
 import 'package:caffa/Models/User.dart';
 import 'package:caffa/Screens/CheckOut/checkout_screen.dart';
+import 'package:caffa/Screens/GuestMode/guest_screen.dart';
 import 'package:caffa/Screens/basket/presentation/basket_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/basket_controller/basket_controller.dart';
 import 'package:caffa/basket_controller/basket_model.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:caffa/widgets/def_formFeild.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,13 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
 
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({super.key, required this.userData});
+  const DetailsScreen({super.key, required this.storeData});
 
-  final UserData userData;
+  final StoreData storeData;
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -28,20 +30,56 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
   List<String> buttonList = ['قهوة اليوم حار', 'قهوة اليوم بارد'];
   var recordController = TextEditingController();
   final BasketController controller = Get.put(BasketController());
+  double oldPurchasedPrice = 0;
+
+  Future _loadUserData() async {
+    // Step 1: Fetch user data from Firestore
+    DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(AppSettingsPreferences().id)
+        .collection('stores')
+        .doc(widget.storeData.id)
+        .get();
+
+    // Map<String, dynamic> userData =
+    //     userDataSnapshot.data() as Map<String, dynamic>;
+    // UserData user = UserData.fromMap(userData);
+    print(userDataSnapshot.data());
+    setState(() {
+      AppSettingsPreferences().setAvailableCups(
+          availableCups: userDataSnapshot.get('availableCups') ?? 0);
+      oldPurchasedPrice = userDataSnapshot.get('price') ?? 0;
+    });
+    controller.setAvailableCups(userDataSnapshot.get('availableCups'));
+    print(AppSettingsPreferences().availableCups);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initSta
+    //  te
+    // setState(() {
+    //   widget.isFirst = false;
+    // });
+    super.initState();
+    if (!AppSettingsPreferences().isGuest) _loadUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.storeData.name == 'دانكن')
+      buttonList = ['بلاك كوفي بارد', 'بلاك كوفي حار'];
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Stack(
               children: [
-                Image.asset(
-                  "assets/bouk.jpg",
+                Image.network(
+                  widget.storeData.image!,
                   height: 292.h,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -73,6 +111,7 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                     child: Container(
                       width: 50.w,
                       height: 50.h,
+                      alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 32.h),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -91,30 +130,38 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                   left: 80.w,
                   child: InkWell(
                     onTap: () async {
-                      Get.to(() => BasketScreen());
+                      AppSettingsPreferences().isGuest
+                          ? Get.to(() => GuestScreen(
+                                isHomeScreen: false,
+                                appBarHeader: 'سلة المشتريات',
+                              ))
+                          : Get.to(() => BasketScreen(
+                                isHomeScreen: false,
+                                storeData: widget.storeData,
+                              ));
 
                       // Step 1: Fetch user data from Firestore
-                      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(AppSettingsPreferences().id)
-                          .get();
+                      DocumentSnapshot userDataSnapshot =
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(AppSettingsPreferences().id)
+                              .get();
                       Map<String, dynamic> userData =
-                      userDataSnapshot.data() as Map<String, dynamic>;
+                          userDataSnapshot.data() as Map<String, dynamic>;
                       UserData user = UserData.fromMap(userData);
                       AppSettingsPreferences().saveUser(user: user);
-
-
                     },
                     child: Container(
                       width: 50.w,
                       height: 50.h,
+                      alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 32.h),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
-                      child: Image.asset(
-                        "assets/basket.png",
+                      child: SvgPicture.asset(
+                        "assets/cart.svg",
                         width: 24.w,
                         height: 24.h,
                         fit: BoxFit.scaleDown,
@@ -133,8 +180,8 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                   width: 23.w,
                 ),
                 Text(
-                  'X',
-                  style: GoogleFonts.almarai(
+                  widget.storeData.name!,
+                  style: titilliumRegular.copyWith(
                     fontSize: 18.w,
                     fontWeight: FontWeight.bold,
                   ),
@@ -142,7 +189,7 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                 Spacer(),
                 Text(
                   "معلومات المقهى",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 16.sp,
                     color: Color(0XFF2D005D),
                   ),
@@ -159,7 +206,7 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                 ),
                 // Text(
                 //   "أحلى مقهى قريب منك.",
-                //   style: GoogleFonts.almarai(
+                //   style: titilliumRegular.copyWith(
                 //     fontSize: 16.w,
                 //     color: Color(0XFFA8A8A8),
                 //   ),
@@ -167,7 +214,7 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                 Spacer(),
                 Text(
                   "تعليقات",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 16.sp,
                     color: Color(0XFF2D005D),
                   ),
@@ -195,7 +242,7 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
             //     ),
             //     Text(
             //       "4.9",
-            //       style: GoogleFonts.almarai(
+            //       style: titilliumRegular.copyWith(
             //         fontSize: 15.w,
             //         color: Color(0XFFFFA800),
             //       ),
@@ -213,7 +260,7 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
             //     // ),
             //     // Text(
             //     //   "مفتوح حتى الساعة 2:30 صباحًا",
-            //     //   style: GoogleFonts.almarai(
+            //     //   style: titilliumRegular.copyWith(
             //     //     fontSize: 14.w,
             //     //     color: Color(0XFFA8A8A8),
             //     //   ),
@@ -239,20 +286,27 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
                   buttonValues: buttonList,
                   buttonHeight: 50.h,
                   buttonWidth: 160.w,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   radioButtonValue: (value, index) {
-                    controller.AddToCart(
-                        productModel: BasketModel(
-                            quantity: 1,
-                            productId: index,
-                            productName: value.toString()));
+                    if (AppSettingsPreferences().isGuest) {
+                      showSnackBar(
+                          context: context,
+                          message: 'برجاء تسجيل الدخول',
+                          error: true);
+                    } else {
+                      controller.AddToCart(
+                          productModel: BasketModel(
+                              quantity: 1,
+                              productId: index,
+                              productName: value.toString()));
 
-                    showSnackBar(
-                        context: context,
-                        message: 'تم الإضافه إلى السلة بنجاح',
-                        error: false);
-                    print("Button value " + value.toString());
-                    print("Integer value " + index.toString());
+                      showSnackBar(
+                          context: context,
+                          message: 'تم الإضافه إلى السلة بنجاح',
+                          error: false);
+                      print("Button value " + value.toString());
+                      print("Integer value " + index.toString());
+                    }
                   },
                   horizontal: true,
                   enableShape: true,
@@ -279,12 +333,24 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => CheckOutScreen());
+                AppSettingsPreferences().isGuest
+                    ? Get.to(() => GuestScreen(
+                          isHomeScreen: false,
+                          appBarHeader: 'الدفع',
+                        ))
+                    : Get.to(() => CheckOutScreen(
+                          cups: 22,
+                          price: 22,
+                          storeData: widget.storeData,
+                          oldAvailableCups:
+                              AppSettingsPreferences().availableCups,
+                          oldPurchasedPrice: oldPurchasedPrice,
+                        ));
               },
               child: Text(
-                "بطاقة 5 أكواب قهوة ب SAR 45",
-                style: GoogleFonts.almarai(
-                  fontSize: 20.sp,
+                "بطاقة راعي الآوله 22 كوب",
+                style: titilliumRegular.copyWith(
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -304,12 +370,24 @@ class _DetailsScreenState extends State<DetailsScreen> with Helpers {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => CheckOutScreen());
+                AppSettingsPreferences().isGuest
+                    ? Get.to(() => GuestScreen(
+                          isHomeScreen: false,
+                          appBarHeader: 'الدفع',
+                        ))
+                    : Get.to(() => CheckOutScreen(
+                          cups: 32,
+                          price: 32,
+                          storeData: widget.storeData,
+                          oldAvailableCups:
+                              AppSettingsPreferences().availableCups,
+                          oldPurchasedPrice: oldPurchasedPrice,
+                        ));
               },
               child: Text(
-                "بطاقة 10 أكواب قهوة ب SAR 65",
-                style: GoogleFonts.almarai(
-                  fontSize: 20.sp,
+                "بطاقة راعي الآوله 32 كوب",
+                style: titilliumRegular.copyWith(
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Color(0XFF2D005D),
                 ),

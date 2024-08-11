@@ -1,4 +1,6 @@
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget myDivider() => Padding(
@@ -39,12 +41,10 @@ Widget defaultFormFeild({
   keyboardType: inputType,
   obscureText: isObsecured,
   decoration: InputDecoration(
-    labelStyle: GoogleFonts.lato(
-      textStyle: Theme.of(context).textTheme.headlineMedium,
-      fontSize: 22,
+    labelStyle: titilliumRegular.copyWith(
+      fontSize: 18.sp,
       color: color,
       fontWeight: FontWeight.w700,
-      fontStyle: FontStyle.italic,
     ),
     filled: true,
     fillColor: Colors.white.withOpacity(0),
@@ -65,18 +65,20 @@ Widget defaultFormFeild({
 
 
 
-Widget buildListTile(String title, IconData icon,tabHandler) {
+Widget buildListTile(String title, icon,tabHandler) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
     child: Card(
+      color: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(30),
             bottomLeft: Radius.circular(10)),
       ),
-      elevation: 10.0,
+      elevation: 5.0,
       child: Container(
+        // color: Colors.white,
         height: 70,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -87,9 +89,9 @@ Widget buildListTile(String title, IconData icon,tabHandler) {
             ),
             title: Text(
               title,
-              style: TextStyle(
-                fontFamily: '',
+              style: titilliumRegular.copyWith(
                 fontWeight: FontWeight.w700,
+                fontSize: 18.sp
               ),
             ),
             onTap:tabHandler,

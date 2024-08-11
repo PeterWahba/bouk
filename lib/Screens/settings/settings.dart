@@ -1,11 +1,13 @@
 import 'package:caffa/fb-controllers/fb_auth_controller.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
+import 'package:caffa/widgets/custom_appbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'change_password.dart';
-import 'components/components.dart';
+import '../../widgets/components.dart';
 import 'edit_profile.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -18,32 +20,10 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> with Helpers {
   @override
   Widget build(BuildContext context) {
-    bool _hasInternet = false;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.white,
-            )),
-        backgroundColor: Color(0XFF313131),
-        title: Text(
-          'الإعدادات',
-          style: TextStyle(color: Colors.white),
-        ),
-        elevation: 10,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Icon(
-              Icons.settings_outlined,
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
+      // backgroundColor: Colors.white,
+      appBar: CustomAppBar(context: context, title: 'الإعدادات', isHomeScreen: false),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
@@ -71,13 +51,13 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
                   context: context,
                   builder: (_) => AlertDialog(
                         elevation: 24.0,
-                        title: const Text('هل أنت متأكد'),
+                        title: const Text('هل أنت متأكد',style: titilliumRegular,),
                         content: const Text('لن تسطيع استرجاع الحساب مجدداً'),
                         actions: [
                           CupertinoDialogAction(
                             child: Text(
                               'حذف',
-                              style: TextStyle(color: Colors.red),
+                              style: titilliumRegular.copyWith(color: Colors.red),
                             ),
                             onPressed: () {
                               setState(() {

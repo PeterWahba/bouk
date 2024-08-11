@@ -7,6 +7,14 @@ import 'basket_model.dart';
 class BasketController extends GetxController with Helpers {
   var counter = <int>[].obs;
   var basketProducts = <BasketModel>[].obs; // قائمة المنتجات في سلة التسوق
+  int? _availableCups;
+  int? get availableCups => _availableCups;
+
+  void setAvailableCups(int cups)
+  {
+    _availableCups = cups ;
+    update();
+  }
 
   void minus({required int index}) async {
     if (counter[index] > 1) {

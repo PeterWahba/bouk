@@ -1,6 +1,8 @@
 import 'package:caffa/basket_controller/basket_controller.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -33,6 +35,13 @@ class _BasketState extends State<Basket> with Helpers {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius:5 ,
+              spreadRadius: 2
+            )
+          ]
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,8 +65,11 @@ class _BasketState extends State<Basket> with Helpers {
               children: [
                 Text(
                   widget.categoriesName,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 20),
+                  style: titilliumRegular.copyWith(
+
+                      fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
                 ),
                 SizedBox(height: mediaQueryHeight(context) / 60),
                 Row(
@@ -81,7 +93,7 @@ class _BasketState extends State<Basket> with Helpers {
                     SizedBox(width: mediaQueryHeight(context) / 60),
                     Obx(() => Text(
                         '${controller.basketProducts[widget.index].quantity}',
-                        style: const TextStyle(
+                        style:  titilliumRegular.copyWith(
                           fontWeight: FontWeight.bold,
                         ))),
                     SizedBox(width: mediaQueryHeight(context) / 60),

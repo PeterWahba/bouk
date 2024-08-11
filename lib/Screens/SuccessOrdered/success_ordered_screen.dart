@@ -1,4 +1,5 @@
 import 'package:caffa/Screens/Cards/cards_screen.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,7 @@ class _SuccessOrderedScreenState extends State<SuccessOrderedScreen> {
               Center(
                 child: Text(
                   "تم تأكيد طلبك!",
-                  style: GoogleFonts.almarai(
+                  style: titilliumRegular.copyWith(
                     fontSize: 20.w,
                     fontWeight: FontWeight.bold,
                     color: Color(0XFF2D005D),
@@ -55,7 +56,7 @@ class _SuccessOrderedScreenState extends State<SuccessOrderedScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 36.w),
                   child: Text(
                     "ستجد الكرت الافتراضي في ملفك الشخصي. اضغط على الزر أدناه وتحقق من بطاقتك",
-                    style: GoogleFonts.almarai(
+                    style: titilliumRegular.copyWith(
                       fontSize: 18.w,
                     ),
                     textAlign: TextAlign.center,
@@ -67,15 +68,15 @@ class _SuccessOrderedScreenState extends State<SuccessOrderedScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     // performLogin();
-                    Get.to(() => CardScreen(),
+                    Get.to(() => CardScreen(isHomeScreen: false,),
                         transition: Transition.circularReveal);
                   },
                   child: Text(
                     "تحقق من بطاقتك",
-                    style: GoogleFonts.almarai(
+                    style: titilliumRegular.copyWith(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: Color(0XFF020202),
+                      color: Colors.white,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(

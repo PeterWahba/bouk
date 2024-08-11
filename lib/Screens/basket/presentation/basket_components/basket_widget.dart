@@ -1,3 +1,4 @@
+import 'package:caffa/Models/Store.dart';
 import 'package:caffa/Models/User.dart';
 import 'package:caffa/Screens/Details/details_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
@@ -13,11 +14,14 @@ import 'basket_products.dart';
 import 'basket_salary.dart';
 
 class BasketSection extends StatefulWidget with Helpers {
-  BasketSection({Key? key, required this.firstCategoryName}) : super(key: key);
+  BasketSection(
+      {Key? key, required this.firstCategoryName, required this.storeData})
+      : super(key: key);
   final BasketController controller = Get.put(BasketController());
 
   final String firstCategoryName;
-
+  final StoreData storeData;
+  late bool isTapped = false;
   @override
   State<BasketSection> createState() => _BasketSectionState();
 }
@@ -33,19 +37,29 @@ class _BasketSectionState extends State<BasketSection> {
       DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(AppSettingsPreferences().id)
+          .collection('stores')
+          .doc(widget.storeData.id)
           .get();
-      Map<String, dynamic> userData =
-          userDataSnapshot.data() as Map<String, dynamic>;
-      UserData user = UserData.fromMap(userData);
+
+      // Map<String, dynamic> userData =
+      //     userDataSnapshot.data() as Map<String, dynamic>;
+      // UserData user = UserData.fromMap(userData);
+      print(userDataSnapshot.data());
       setState(() {
-        AppSettingsPreferences().saveUser(user: user);
+        AppSettingsPreferences().setAvailableCups(
+            availableCups: userDataSnapshot.get('availableCups') ?? 0);
       });
+
+
       print(AppSettingsPreferences().availableCups);
-      if (availableCups != AppSettingsPreferences().availableCups){
+      if (availableCups != AppSettingsPreferences().availableCups&& widget.isTapped ) {
         print('object');
-        Get.to(DetailsScreen(userData: user));
+
+        ///TODO
+        // Get.to(DetailsScreen(storeData: user));
         controller.deleteCartProducts(context);
       }
+
     });
   }
 
@@ -53,6 +67,9 @@ class _BasketSectionState extends State<BasketSection> {
   void initState() {
     // TODO: implement initSta
     //  te
+    // setState(() {
+    //   widget.isFirst = false;
+    // });
     super.initState();
     _loadUserData();
   }
@@ -90,6 +107,7 @@ class _BasketSectionState extends State<BasketSection> {
                         );
                       });
                 } else
+                {
                   showDialog(
                       context: context,
                       builder: (_) {
@@ -99,11 +117,16 @@ class _BasketSectionState extends State<BasketSection> {
                           isQRCode: true,
                         );
                       });
+                  setState(() {
+                    widget.isTapped = true;
+                  });
+                }
+
               },
               child: Text(
                 "أطلب الآن",
                 style: GoogleFonts.almarai(
-                  fontSize: 20.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),

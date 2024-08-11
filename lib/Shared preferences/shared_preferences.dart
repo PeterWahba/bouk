@@ -38,18 +38,24 @@ import '../Models/User.dart';
     sharedPreferences!.setString('userType', user.userType ?? "");
     sharedPreferences!.setInt('availableCups', user.availableCups ?? 0);
     sharedPreferences!.setBool('isVerified', user.isVerified ?? false);
+    sharedPreferences!.setBool('isGuest', false);
+  }
+
+  Future<void> setAvailableCups({required int availableCups}) async {
+    sharedPreferences!.setInt('availableCups', availableCups ?? 0);
   }
 
   UserData user() {
     UserData user = new UserData(
         id:  sharedPreferences!.getString('id')!,
         userType:  sharedPreferences!.getString('userType')!,
-        isVerified:  sharedPreferences!.getBool('isVerified')!,
+      isVerified:  sharedPreferences!.getBool('isVerified')!,
         name:  sharedPreferences!.getString('name')!,
         email:  sharedPreferences!.getString('email')!,
         password:  sharedPreferences!.getString('password')!,
         phoneNumber:  sharedPreferences!.getString('phoneNumber')!,
-        availableCups: sharedPreferences!.getInt('availableCups')!);
+        availableCups: sharedPreferences!.getInt('availableCups')!,
+    );
 
     return user;
   }
@@ -58,6 +64,7 @@ import '../Models/User.dart';
     print( sharedPreferences!.getString('token'));
     await  sharedPreferences!.setString('token', '');
     await  sharedPreferences!.setString('id', '');
+    handleClearPrefs();
     print( sharedPreferences!.getString('token'));
   }
 
@@ -68,6 +75,7 @@ import '../Models/User.dart';
   String get name =>  sharedPreferences!.getString('name') ?? '';
   int get availableCups =>  sharedPreferences!.getInt('availableCups') ?? 0;
   bool get isVerified =>  sharedPreferences!.getBool('isVerified') ?? false;
+  bool get isGuest =>  sharedPreferences!.getBool('isGuest') ?? false;
 
   void handleClearPrefs() {
      sharedPreferences!.clear();

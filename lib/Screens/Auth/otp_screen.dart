@@ -1,3 +1,4 @@
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -99,7 +100,7 @@ class _OTPScreenState extends State<OTPScreen> with Helpers {
             ),
             Text(
               "ادخل رمز التحقق الذي تم ارساله لرقم هاتفك",
-              style: GoogleFonts.almarai(
+              style: titilliumRegular.copyWith(
                 fontSize: 26.sp,
                 fontWeight: FontWeight.bold,
                 color: Color(0XFF000000),
@@ -206,14 +207,14 @@ class _OTPScreenState extends State<OTPScreen> with Helpers {
             ),
             Text(
               "لم أتلق رمزًا (00: 15 ثانية)",
-              style: GoogleFonts.almarai(
+              style: titilliumRegular.copyWith(
                 color: Color(0XFF13362A),
                 fontSize: 15.sp,
               ),
             ),
             Text(
               "أعد الارسال مرة اخرى",
-              style: GoogleFonts.almarai(
+              style: titilliumRegular.copyWith(
                 color: Color(0XFFA8A8A8),
                 fontSize: 15.sp,
                 height: 1.h,

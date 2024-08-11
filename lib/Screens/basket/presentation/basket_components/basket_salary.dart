@@ -1,8 +1,10 @@
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/basket_controller/basket_controller.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/utils/helpers.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class BasketSalary extends StatefulWidget {
@@ -29,12 +31,16 @@ class _BasketSalaryState extends State<BasketSalary> with Helpers {
             children: [
               Text(
                 "اجمالي عدد الأكواب المطلوبة",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: titilliumRegular.copyWith(fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
+                ),
               ),
               Spacer(),
               Text(
                 controller.totalCubs.toString(),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: titilliumRegular.copyWith(fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
+                ),
               ),
             ],
           ),
@@ -45,17 +51,17 @@ class _BasketSalaryState extends State<BasketSalary> with Helpers {
             children: [
               Text(
                 "اجمالي عدد الأكواب المتاحة ",
-                style: TextStyle(
+                style: titilliumRegular.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 18.sp,
                     color: Colors.green),
               ),
               Spacer(),
               Text(
-                AppSettingsPreferences().availableCups.toString(),
-                style: TextStyle(
+                '${controller.availableCups??0}',
+                style: titilliumRegular.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 18.sp,
                     color: Colors.green),
               ),
             ],

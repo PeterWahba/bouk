@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:caffa/Screens/Auth/emaiVerifyScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../Models/User.dart';

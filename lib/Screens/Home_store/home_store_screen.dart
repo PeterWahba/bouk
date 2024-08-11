@@ -1,19 +1,16 @@
 import 'package:caffa/Models/User.dart';
+import 'package:caffa/Screens/Home_store/clients_screen.dart';
 import 'package:caffa/Screens/Home_store/component/qr_screen.dart';
 import 'package:caffa/Shared%20preferences/shared_preferences.dart';
 import 'package:caffa/fb-controllers/fb_auth_controller.dart';
+import 'package:caffa/utils/custom_themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-
-import '../Details/details_screen.dart';
-import '../Location/location_screen.dart';
 
 class HomeStoreScreen extends StatefulWidget {
   const HomeStoreScreen({super.key});
@@ -23,7 +20,7 @@ class HomeStoreScreen extends StatefulWidget {
 }
 
 class _HomeStoreScreenState extends State<HomeStoreScreen> {
-  late Future<List<UserData>> _futureuserData;
+  late List<UserData> futureUserData;
   late int availableCups = 0;
 
   Future _loadUserData() async {
@@ -33,13 +30,33 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
         .doc(AppSettingsPreferences().id)
         .get();
     Map<String, dynamic> userData =
-    userDataSnapshot.data() as Map<String, dynamic>;
+        userDataSnapshot.data() as Map<String, dynamic>;
     UserData user = UserData.fromMap(userData);
     setState(() {
       AppSettingsPreferences().saveUser(user: user);
-
     });
     print(AppSettingsPreferences().availableCups);
+  }
+
+  Future<List<UserData>> _loadUsers() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('stores')
+          .doc(AppSettingsPreferences().id)
+          .collection('clients')
+          .get();
+
+      List<UserData> users = querySnapshot.docs.map((doc) {
+        return UserData.fromMap(doc.data() as Map<String, dynamic>);
+      }).toList();
+      print(users);
+
+      return users;
+    } catch (error) {
+      // Handle Firestore read error here
+      print('Firestore read error: $error');
+      return [];
+    }
   }
 
   @override
@@ -48,14 +65,17 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
     //  te
     super.initState();
     _loadUserData();
+    _loadUsers().then((onValue)
+    {
+      futureUserData = onValue;
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Column(
@@ -85,8 +105,8 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
                             children: [
                               Text(
                                 "مرحباً !",
-                                style: GoogleFonts.almarai(
-                                  fontSize: 12.sp,
+                                style: titilliumRegular.copyWith(
+                                  fontSize: 14.sp,
                                   color: Color(0XFFB7B7B7),
                                 ),
                               ),
@@ -95,8 +115,8 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
                               ),
                               Text(
                                 "${AppSettingsPreferences().name}",
-                                style: GoogleFonts.almarai(
-                                  fontSize: 14.sp,
+                                style: titilliumRegular.copyWith(
+                                  fontSize: 15.sp,
                                   color: Color(0XFFFFFFFF),
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -111,41 +131,50 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
                                     color: Colors.red,
                                   ),
                                   onPressed: () => {
-                                        showDialog(
-                                            context: context,
-                                            builder: (_) => AlertDialog(
-                                                  elevation: 24.0,
-                                                  title: Text('هل أنت متأكد ؟',
-                                                      style: TextStyle(
-                                                          color: Colors.black)),
-                                                  content: Text(
-                                                      'سوف تقوم بتسجيل الخروج من حسابكم',
-                                                      style: TextStyle(
-                                                          color: Colors.black)),
-                                                  actions: [
-                                                    CupertinoDialogAction(
-                                                      child: Container(
-                                                        child: Text(
-                                                          'تسجيل الخروج',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.red),
-                                                        ),
-                                                      ),
-                                                      onPressed: () {
-                                                        FbAuthController()
-                                                            .signOut();
-                                                      },
-                                                    ),
-                                                    CupertinoDialogAction(
-                                                      child: Text('إلغاء'),
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ))
-                                      }),
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) => AlertDialog(
+                                          elevation: 24.0,
+                                          title: Text('هل أنت متأكد ؟',
+                                              textAlign: TextAlign.center,
+                                              style: titilliumRegular.copyWith(
+                                                  fontSize: 20.sp,
+                                                  color: Colors.black)),
+                                          content: Text(
+                                              'سوف تقوم بتسجيل الخروج من حسابكم',
+                                              textAlign: TextAlign.center,
+                                              style: titilliumRegular.copyWith(
+                                                  fontSize: 18.sp,
+                                                  color: Colors.black)),
+                                          actions: [
+                                            CupertinoDialogAction(
+                                              child: Container(
+                                                child: Text(
+                                                  'تسجيل الخروج',
+                                                  style: titilliumRegular.copyWith(
+                                                      fontSize: 16.sp,
+                                                      color:
+                                                      Colors.red),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                FbAuthController()
+                                                    .signOut();
+                                              },
+                                            ),
+                                            CupertinoDialogAction(
+                                              child: Text('إلغاء',
+                                                style: titilliumRegular.copyWith(
+                                                    fontSize: 16.sp,
+                                                    color:
+                                                    Colors.green),),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        ))
+                                  }),
                               Image.asset("assets/Group 3147.png"),
                             ],
                           ),
@@ -164,10 +193,9 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: (){
-
-                      Get.to(QRScanScreen());
-                    },
+                      onTap: () {
+                        Get.to(QRScanScreen());
+                      },
                       child: HomeScreenItem(
                           'assets/qrScanner.json', 'طلب جديد', '')),
                   const SizedBox(
@@ -179,6 +207,12 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
               ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.person),
+          onPressed: () {
+            Get.to(ClientsScreen(users: futureUserData,));
+          },
         ),
       ),
     );
@@ -205,7 +239,7 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
             ),
             Text(
               '${text}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: titilliumRegular.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             SizedBox(
               height: 2,
@@ -213,10 +247,11 @@ class _HomeStoreScreenState extends State<HomeStoreScreen> {
             totalCups != ''
                 ? Text(
                     '${totalCups}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: titilliumRegular.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
                   )
                 : SizedBox(),
           ],
         ),
       );
 }
+

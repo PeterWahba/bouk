@@ -1,3 +1,5 @@
+import 'package:caffa/utils/custom_themes.dart';
+import 'package:caffa/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +18,7 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: CustomAppBar(context: context, title: "عنواني", isHomeScreen: false),
         backgroundColor: Colors.white,
         body: Container(
           height: double.infinity,
@@ -27,37 +30,37 @@ class _LocationScreenState extends State<LocationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                height: 110.h,
-                width: double.infinity,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 38.w,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: SvgPicture.asset("assets/Frame 20.svg"),
-                    ),
-                    SizedBox(
-                      width: 11.w,
-                    ),
-                    Text(
-                      "عنواني",
-                      style: GoogleFonts.almarai(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              // Container(
+              //   height: 110.h,
+              //   width: double.infinity,
+              //   color: Colors.white,
+              //   child: Row(
+              //     children: [
+              //       SizedBox(
+              //         width: 38.w,
+              //       ),
+              //       InkWell(
+              //         onTap: () {
+              //           Get.back();
+              //         },
+              //         child: SvgPicture.asset("assets/Frame 20.svg"),
+              //       ),
+              //       SizedBox(
+              //         width: 11.w,
+              //       ),
+              //       Text(
+              //         "عنواني",
+              //         style: titilliumRegular.copyWith(
+              //           fontSize: 24.sp,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
               Spacer(),
               Container(
-                height: 206.h,
+                height: 200.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -102,7 +105,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             children: [
                               Text(
                                 "المدينة - السعودية ",
-                                style: GoogleFonts.almarai(
+                                style: titilliumRegular.copyWith(
                                   color: Colors.black,
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.bold,
@@ -110,7 +113,7 @@ class _LocationScreenState extends State<LocationScreen> {
                               ),
                               Text(
                                 "حي السلطانة - المدينة المنورة",
-                                style: GoogleFonts.almarai(
+                                style: titilliumRegular.copyWith(
                                   color: Color(0XFFACACAC),
                                   fontSize: 10.sp,
                                   fontWeight: FontWeight.bold,
@@ -121,7 +124,7 @@ class _LocationScreenState extends State<LocationScreen> {
                           Spacer(),
                           Text(
                             "البيت",
-                            style: GoogleFonts.almarai(
+                            style: titilliumRegular.copyWith(
                               color: Color(0XFF000000),
                               fontSize: 12.sp,
                               fontWeight: FontWeight.bold,
@@ -144,10 +147,10 @@ class _LocationScreenState extends State<LocationScreen> {
                       },
                       child: Text(
                         "تأكيد العنوان",
-                        style: GoogleFonts.almarai(
+                        style: titilliumRegular.copyWith(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
-                          color: Color(0XFF020202),
+                          color: Colors.white,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(

@@ -23,6 +23,7 @@ class _BannersSettingsScreenState extends State<BannersSettingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
         context: context,
         title: 'إدارة الإعلانات',

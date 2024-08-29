@@ -19,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar:
           CustomAppBar(context: context, title: 'حسابي', isHomeScreen: true),
       body: SingleChildScrollView(
@@ -156,7 +156,7 @@ Widget buildListTile(String title, icon, tabHandler) {
             leading: Text(
               title,
               style: titilliumRegular.copyWith(
-                  fontWeight: FontWeight.w700, fontSize: 16.sp),
+                  fontWeight: FontWeight.w700, fontSize: 14.sp),
             ),
             trailing: Icon(
               icon,

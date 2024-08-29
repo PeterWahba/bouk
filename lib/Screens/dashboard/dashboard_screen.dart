@@ -56,6 +56,7 @@ class DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       key: _scaffoldKey,
       extendBody: true,
       body: PageStorage(bucket: bucket, child: _screens[_pageIndex]),

@@ -1,3 +1,4 @@
+import 'package:caffa/Models/Store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/User.dart';
@@ -41,6 +42,20 @@ import '../Models/User.dart';
     sharedPreferences!.setBool('isGuest', false);
   }
 
+
+  Future<void> saveStore({required StoreData store}) async {
+    sharedPreferences!.setString('id', store.id ?? "");
+    sharedPreferences!.setString('name', store.name ?? "");
+    sharedPreferences!.setString('email', store.email ?? "");
+    sharedPreferences!.setString('image', store.image ?? "");
+    sharedPreferences!.setString('phoneNumber', store.phoneNumber ?? "");
+    sharedPreferences!.setString('password', store.password ?? "");
+    sharedPreferences!.setString('userType', store.userType ?? "");
+    sharedPreferences!.setInt('availableCups', store.availableCups ?? 0);
+    sharedPreferences!.setBool('isVerified', store.isVerified ?? false);
+    sharedPreferences!.setBool('isGuest', false);
+  }
+
   Future<void> setAvailableCups({required int availableCups}) async {
     sharedPreferences!.setInt('availableCups', availableCups ?? 0);
   }
@@ -73,6 +88,7 @@ import '../Models/User.dart';
   String get email =>  sharedPreferences!.getString('email') ?? '';
   String get userType =>  sharedPreferences!.getString('userType') ?? '';
   String get name =>  sharedPreferences!.getString('name') ?? '';
+  String get image =>  sharedPreferences!.getString('image') ?? '';
   int get availableCups =>  sharedPreferences!.getInt('availableCups') ?? 0;
   bool get isVerified =>  sharedPreferences!.getBool('isVerified') ?? false;
   bool get isGuest =>  sharedPreferences!.getBool('isGuest') ?? false;

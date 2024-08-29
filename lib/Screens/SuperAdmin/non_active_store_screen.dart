@@ -78,7 +78,15 @@ class _NonActiveStoresScreenState extends State<NonActiveStoresScreen> {
                   List<StoreData> stores = snapshot.data!;
 
                   if (stores.isNotEmpty) {
-                    return ListView.builder(
+                    return ListView.separated(
+                      separatorBuilder: (ctx,i)=>Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width:double.infinity,
+                          height: 1,
+                          color: Colors.grey.withOpacity(.5),
+                        ),
+                      ),
                       padding: EdgeInsets.all(0),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -132,27 +140,11 @@ class _NonActiveStoresScreenState extends State<NonActiveStoresScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 23.w),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          height: 150.h,
-                                          width: double.infinity,
-                                          child: CustomImage(
-                                            fit: BoxFit.cover,
-                                            image: stores[index].image!,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 11.h, left: 11.w),
-                                          child: Row(
-                                            children: [
-                                              Spacer(),
-                                              Icon(Icons.favorite_border, color: Colors.white),
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                    height: 150.h,
+                                    width: double.infinity,
+                                    child: CustomImage(
+                                      fit: BoxFit.cover,
+                                      image: stores[index].image!,
                                     ),
                                   ),
                                   SizedBox(height: 8.h),
@@ -164,7 +156,7 @@ class _NonActiveStoresScreenState extends State<NonActiveStoresScreen> {
                                           stores[index].name.toString(),
                                           style: titilliumRegular.copyWith(
                                             color: Color(0XFF2D005D),
-                                            fontSize: 18.w,
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -172,12 +164,12 @@ class _NonActiveStoresScreenState extends State<NonActiveStoresScreen> {
                                         Text(
                                           "4.9",
                                           style: titilliumRegular.copyWith(
-                                            fontSize: 15.w,
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0XFFFFA800),
                                           ),
                                         ),
-                                        Icon(Icons.star_rate_rounded, color: Color(0XFFFFA800)),
+                                        Icon(Icons.star_rate_rounded, color: Color(0XFFFFA800),size: 20,),
                                       ],
                                     ),
                                   ),

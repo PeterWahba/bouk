@@ -460,12 +460,11 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                     style: titilliumRegular.copyWith(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(318.w, 60.h),
-                    backgroundColor: Color(0XFF2D005D),
+                    backgroundColor: Colors.white,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100.r),

@@ -20,44 +20,40 @@ class RegisterScreenCoffee extends StatefulWidget {
   State<RegisterScreenCoffee> createState() => _RegisterScreenCoffeeState();
 }
 
-class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
-    with Helpers {
+class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee> with Helpers {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _phoneController1;
   late TextEditingController _passwordController;
-  late TextEditingController _addressController; // Controller for address
+  late TextEditingController _addressController;
+
+  late Position position; // Define position here
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _phoneController1 = TextEditingController();
     _passwordController = TextEditingController();
-    _addressController =
-        TextEditingController(); // Initialize address controller
+    _addressController = TextEditingController();
     _getCurrentLocationAndAddress(); // Fetch address on page load
   }
 
   Future<void> _getCurrentLocationAndAddress() async {
     try {
-      // Check for location permissions
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
 
-      // Get the current position
-      Position position = await Geolocator.getCurrentPosition(
+      position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      // Get the address from the coordinates
       List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
@@ -68,7 +64,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
         String fullAddress =
             "${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
 
-        // Set the address in the TextField
         setState(() {
           _addressController.text = fullAddress;
         });
@@ -85,8 +80,22 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
     _phoneController.dispose();
     _phoneController1.dispose();
     _passwordController.dispose();
-    _addressController.dispose(); // Dispose address controller
+    _addressController.dispose();
     super.dispose();
+  }
+
+  String _formatAddress(String address) {
+    List<String> parts = address.split('-');
+
+    if (parts.length >= 3) {
+      String street = parts[0].trim();
+      String city = parts[1].trim();
+      String country = parts[2].trim();
+
+      return '$street, $city, $country';
+    } else {
+      return address;
+    }
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -94,7 +103,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
   Future<void> _registerUser(BuildContext context) async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-    print(_phoneController.text);
+
     if (email.isNotEmpty && password.isNotEmpty) {
       try {
         showDialog(
@@ -108,14 +117,13 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
             );
           },
         );
-        // Create the user with email and password
+
         final UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
+        await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
 
-        // After sending OTP, save user data in Firestore
         final User? user = userCredential.user;
         if (user != null) {
           await _firestore.collection('users').doc(user.uid).set({
@@ -126,9 +134,9 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
             'id': user.uid,
             'userType': 'store',
             'isActive': false,
-            // 'latitude': position.latitude,
-            // 'longitude': position.longitude,
-            // Add any other stores data you want to save
+            'address': _formatAddress(_addressController.text),
+            'latitude': position.latitude,
+            'longitude': position.longitude,
           }).then((onValue) async {
             await _firestore.collection('stores').doc(user.uid).set({
               'phoneNumber': _phoneController.text,
@@ -138,10 +146,10 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
               'id': user.uid,
               'userType': 'store',
               'image': '',
-              'isActive': false
-              // 'latitude': position.latitude,
-              // 'longitude': position.longitude,
-              // Add any other user data you want to save
+              'isActive': false,
+              'address': _formatAddress(_addressController.text),
+              'latitude': position.latitude,
+              'longitude': position.longitude,
             });
           }).then((onValue) {
             Get.offAll(() => AuthScreen(), transition: Transition.cupertino);
@@ -153,12 +161,9 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
             message: 'Registration failed. Please try again.',
             error: true);
       } finally {
-        // Close the dialog when done
-        // Navigator.of(context).pop();
+        Navigator.of(context).pop(); // Close the dialog
       }
     } else {
-      // Handle empty email or password case
-      print('Error: Email or password is empty');
       showSnackBar(
           context: context,
           message: 'Please enter valid email and password.',
@@ -213,20 +218,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                     ],
                   ),
                 ),
-                // SizedBox(
-                //   height: 12.h,
-                // ),
-                // Padding(
-                //   padding: EdgeInsets.only(right: 35.w, left: 32.w),
-                //   child: Text(
-                //     "انغمس في المزيج المثالي من النكهة والأجواء، حيث يحكي كل كوب قصة من الحرفية والتواصل مع المجتمع.",
-                //     style: titilliumRegular.copyWith(
-                //       fontSize: 14.sp,
-                //       color: Color(0XFFBCBCBC),
-                //     ),
-                //     textAlign: TextAlign.center,
-                //   ),
-                // ),
                 SizedBox(
                   height: 50.h,
                 ),
@@ -278,7 +269,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                           color: Color(0XFFE3E3CE),
                         ),
                       ),
-                      // focusColor: Color(0XFF22A45D),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0XFFE3E3CE),
@@ -302,47 +292,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                     controller: _emailController,
                     decoration: InputDecoration(
                       prefixIcon: SvgPicture.asset(
-                        "assets/Frame 1 (1).svg",
-                        color: Colors.white,
-                        width: 24.w,
-                        height: 24.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      contentPadding: const EdgeInsets.all(10),
-                      counterText: "",
-                      labelText: "الإيميل الإلكتروني",
-                      labelStyle: titilliumRegular.copyWith(
-                          color: Colors.white, fontSize: 14.sp),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0XFFE3E3CE),
-                        ),
-                      ),
-                      // focusColor: Color(0XFF22A45D),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0XFFE3E3CE),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 19.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 28.w),
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    maxLines: 1,
-                    cursorHeight: 25.h,
-                    textDirection: TextDirection.ltr,
-                    style: titilliumRegular.copyWith(color: Colors.white),
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      prefixIcon: SvgPicture.asset(
                         "assets/Frame 1 (4).svg",
                         color: Colors.white,
                         width: 24.w,
@@ -351,7 +300,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                       ),
                       contentPadding: const EdgeInsets.all(10),
                       counterText: "",
-                      labelText: " رقم الهاتف +966",
+                      labelText: "البريد الإلكتروني",
                       labelStyle: titilliumRegular.copyWith(
                           color: Colors.white, fontSize: 14.sp),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -361,7 +310,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                           color: Color(0XFFE3E3CE),
                         ),
                       ),
-                      // focusColor: Color(0XFF22A45D),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0XFFE3E3CE),
@@ -373,18 +321,19 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                 SizedBox(
                   height: 19.h,
                 ),
+
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28.w),
                   child: TextField(
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.number,
                     maxLines: 1,
                     cursorHeight: 25.h,
                     textDirection: TextDirection.ltr,
                     style: titilliumRegular.copyWith(color: Colors.white),
-                    controller: _phoneController1,
+                    controller: _phoneController,
                     decoration: InputDecoration(
                       prefixIcon: SvgPicture.asset(
-                        "assets/123.svg",
+                        "assets/Frame 1 (5).svg",
                         color: Colors.white,
                         width: 24.w,
                         height: 24.h,
@@ -392,7 +341,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                       ),
                       contentPadding: const EdgeInsets.all(10),
                       counterText: "",
-                      labelText: "رقم الرخصة التجارية",
+                      labelText: "رقم الهاتف",
                       labelStyle: titilliumRegular.copyWith(
                           color: Colors.white, fontSize: 14.sp),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -402,7 +351,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                           color: Color(0XFFE3E3CE),
                         ),
                       ),
-                      // focusColor: Color(0XFF22A45D),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0XFFE3E3CE),
@@ -414,6 +362,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                 SizedBox(
                   height: 19.h,
                 ),
+
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28.w),
                   child: TextField(
@@ -425,7 +374,7 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                     controller: _addressController,
                     decoration: InputDecoration(
                       prefixIcon: SvgPicture.asset(
-                        "assets/123.svg",
+                        "assets/Frame 1 (7).svg",
                         color: Colors.white,
                         width: 24.w,
                         height: 24.h,
@@ -443,7 +392,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                           color: Color(0XFFE3E3CE),
                         ),
                       ),
-                      // focusColor: Color(0XFF22A45D),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0XFFE3E3CE),
@@ -455,19 +403,20 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                 SizedBox(
                   height: 19.h,
                 ),
+
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28.w),
                   child: TextField(
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.text,
                     maxLines: 1,
                     cursorHeight: 25.h,
                     textDirection: TextDirection.ltr,
+                    obscureText: true,
                     style: titilliumRegular.copyWith(color: Colors.white),
                     controller: _passwordController,
-                    obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: SvgPicture.asset(
-                        "assets/Frame 1 (2).svg",
+                        "assets/Frame 1 (6).svg",
                         color: Colors.white,
                         width: 24.w,
                         height: 24.h,
@@ -485,7 +434,6 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                           color: Color(0XFFE3E3CE),
                         ),
                       ),
-                      // focusColor: Color(0XFF22A45D),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0XFFE3E3CE),
@@ -498,185 +446,23 @@ class _RegisterScreenCoffeeState extends State<RegisterScreenCoffee>
                   height: 33.h,
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    if (_nameController.text.isNotEmpty &&
-                        _emailController.text.isNotEmpty &&
-                        _passwordController.text.isNotEmpty
-                        // && _phoneController.text.isNotEmpty
-                    ) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Center(
-                            child: SpinKitFadingCircle(
-                              color: Colors.blue,
-                              size: 80.0,
-                            ),
-                          );
-                        },
-                      );
-
-                      _registerUser(context);
-                      // Get.back();
-                    } else {
-                      showSnackBar(
-                          context: context,
-                          message: "أدخل البيانات المطلوبة",
-                          error: true);
-                    }
+                  onPressed: () {
+                    _registerUser(context);
                   },
-                  child: Text(
-                    "إنشاء حساب",
-                    style: titilliumRegular.copyWith(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(318.w, 60.h),
-                    backgroundColor: Color(0XFF2D005D),
+                    backgroundColor: Colors.white,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                     alignment: Alignment.center,
                   ),
-                ),
-                // SizedBox(
-                //   height: 18.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Container(
-                //       height: 1.h,
-                //       width: 93.w,
-                //       color: Color(0XFFD9D9BC),
-                //     ),
-                //     SizedBox(
-                //       width: 23.w,
-                //     ),
-                //     Text(
-                //       "أو الاستمرار مع",
-                //       style: titilliumRegular.copyWith(
-                //         fontSize: 14.sp,
-                //         fontWeight: FontWeight.bold,
-                //         color: Color(0XFFBCBCBC),
-                //       ),
-                //     ),
-                //     SizedBox(
-                //       width: 23.w,
-                //     ),
-                //     Container(
-                //       height: 1.h,
-                //       width: 93.w,
-                //       color: Color(0XFFD9D9BC),
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(
-                //   height: 18.h,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Container(
-                //       height: 35.h,
-                //       width: 100.w,
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(53.r),
-                //         border: Border.all(
-                //           color: Color(0XFFEDEDED),
-                //         ),
-                //       ),
-                //       child: Center(
-                //         child: Image.asset(
-                //           "assets/Rectangle 9 (2).png",
-                //           width: 25.w,
-                //           height: 25.h,
-                //           fit: BoxFit.scaleDown,
-                //         ),
-                //       ),
-                //     ),
-                //     SizedBox(
-                //       width: 23.w,
-                //     ),
-                //     Container(
-                //       height: 35.h,
-                //       width: 100.w,
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(53.r),
-                //         border: Border.all(
-                //           color: Color(0XFFEDEDED),
-                //         ),
-                //       ),
-                //       child: Center(
-                //         child: Image.asset(
-                //           "assets/Rectangle 9.png",
-                //           width: 25.w,
-                //           height: 25.h,
-                //           fit: BoxFit.scaleDown,
-                //         ),
-                //       ),
-                //     ),
-                //     SizedBox(
-                //       width: 23.w,
-                //     ),
-                //     Container(
-                //       height: 35.h,
-                //       width: 100.w,
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(53.r),
-                //         border: Border.all(
-                //           color: Color(0XFFEDEDED),
-                //         ),
-                //       ),
-                //       child: Center(
-                //         child: Image.asset(
-                //           "assets/Rectangle 9 (3).png",
-                //           width: 25.w,
-                //           height: 25.h,
-                //           fit: BoxFit.scaleDown,
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                InkWell(
-                  onTap: () {
-                    Get.to(() => AuthScreen(),
-                        transition: Transition.circularReveal);
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      style: titilliumRegular.copyWith(
-                          fontSize: 18.sp, color: Colors.white),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: "هل لديك حساب؟",
-                          style: titilliumRegular.copyWith(
-                            fontSize: 14.sp,
-                            color: Color(0XFFBCBCBC),
-                          ),
-                        ),
-                        TextSpan(
-                          text: " تسجيل الدخول",
-                          style: titilliumRegular.copyWith(
-                            fontSize: 14.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: Text(
+                    "تسجيل المقهى",
+                    style: titilliumRegular.copyWith(
+                        fontSize: 18.sp, fontWeight: FontWeight.bold),
                   ),
-                ),
-                SizedBox(
-                  height: 10.h,
                 ),
               ],
             ),

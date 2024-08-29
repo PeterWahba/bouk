@@ -11,7 +11,8 @@ import '../../widgets/components.dart';
 import 'edit_profile.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final bool isHomeStore;
+  const SettingsScreen({super.key, this.isHomeStore = false});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -22,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      // backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(context: context, title: 'الإعدادات', isHomeScreen: false),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -35,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
                 // Colors.black,
                 "تعديل بيانات الحساب",
                 Icons.edit_outlined, () {
-              Get.to(() => EditProfileScreen());
+              Get.to(() => EditProfileScreen(isHomeStore: widget.isHomeStore,));
             }),
             buildListTile(
                 // Colors.black,

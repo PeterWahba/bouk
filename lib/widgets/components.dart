@@ -85,13 +85,13 @@ Widget buildListTile(String title, icon,tabHandler) {
           child: ListTile(
             leading: Icon(
               icon,
-              size: 30,
+              size: 20,
             ),
             title: Text(
               title,
               style: titilliumRegular.copyWith(
                 fontWeight: FontWeight.w700,
-                fontSize: 18.sp
+                fontSize: 16.sp
               ),
             ),
             onTap:tabHandler,

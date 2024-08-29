@@ -36,6 +36,7 @@ class _CardScreenState extends State<CardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(context: context, title: 'بطاقاتي', isHomeScreen: widget.isHomeScreen),
       body: FutureBuilder<List<PurchaseModel>>(
         future: _loadPurchasesData(),

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class StoreData {
   String? id;
   int? availableCups;
@@ -5,13 +7,19 @@ class StoreData {
   String? name;
   String? image;
   String? email;
+  String? address;
+  double? longitude;
   String? userType;
   String? password;
+  double? latitude;
   bool? isVerified;
   bool? isActive;
 
   StoreData({
     required this.id,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
     required this.userType,
     required this.isVerified,
     required this.isActive,
@@ -27,7 +35,10 @@ class StoreData {
   factory StoreData.fromMap(Map<String, dynamic> map) {
     return StoreData(
       id: map['id'] ?? '',
+      latitude: map['latitude'] ?? 0.0,
+      longitude: map['longitude'] ?? 0.0,
       image: map['image'] ?? '',
+      address: map['address'] ?? '',
       userType: map['userType'] ?? '',
       isVerified: map['isVerified'] ?? false,
       isActive: map['isActive'] ?? false,
@@ -43,7 +54,10 @@ class StoreData {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'latitude': latitude,
+      'longitude': longitude,
       'image': image,
+      'address': address,
       'userType': userType,
       'isVerified': isVerified,
       'availableCups': availableCups,

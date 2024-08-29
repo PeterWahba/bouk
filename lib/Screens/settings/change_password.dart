@@ -90,8 +90,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: CustomAppBar(context: context, title: 'الإعدادات', isHomeScreen: false),
       body: SingleChildScrollView(
+
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Form(

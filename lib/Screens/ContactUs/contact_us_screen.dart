@@ -65,6 +65,8 @@ class _ContactUsPageState extends State<ContactUsPage> with Helpers {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: CustomAppBar(
           context: context, title: 'تواصل معنا', isHomeScreen: false),
       body: Padding(

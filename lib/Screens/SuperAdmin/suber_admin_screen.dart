@@ -33,11 +33,12 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             // الجزء العلوي من الشاشة
             Container(
-              height: MediaQuery.of(context).size.height * 0.13, // نصف الصفحة
+              // height: MediaQuery.of(context).size.height * 0.1, // نصف الصفحة
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -46,11 +47,10 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
                   ],
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              padding: EdgeInsets.all(15.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 30.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -169,7 +169,7 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
                       case 1:
                         return InkWell(
                           onTap: () {
-                            Get.to(StoreSettingsScreen());
+                            Get.to(ContactUsMessagesScreen());
                           },
                           child: HomeScreenItem(
                               'assets/messages.json', 'قائمة الرسائل'),
@@ -222,7 +222,7 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
             Text(
               text,
               style: titilliumRegular.copyWith(
-                  fontSize: 18.sp, fontWeight: FontWeight.w600),
+                  fontSize: 15.sp, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 2),
           ],

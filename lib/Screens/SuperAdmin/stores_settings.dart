@@ -1,93 +1,74 @@
 import 'package:caffa/utils/custom_themes.dart';
 import 'package:caffa/widgets/custom_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
+import 'package:intl/intl.dart';
 
-import 'active_stores_screen.dart';
-import 'non_active_store_screen.dart';
-
-class StoreSettingsScreen extends StatefulWidget {
-  const StoreSettingsScreen({super.key});
-
-  @override
-  State<StoreSettingsScreen> createState() => _StoreSettingsScreenState();
-}
-
-class _StoreSettingsScreenState extends State<StoreSettingsScreen> {
-
-  @override
-  void initState() {
-    // TODO: implement initSta
-    super.initState();
-  }
-
+class ContactUsMessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: CustomAppBar(context: context, title: 'إدارة المقاهي', isHomeScreen: false),
-        body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                  onTap: () {
-                    Get.to(ActiveStoresScreen());
-                  },
-                  child: HomeScreenItem(
-                      'assets/notActive.json', 'المقاهي النشطه')),
-              const SizedBox(
-                width: 15,
-              ),
-              InkWell(
-                  onTap: () {
-                    Get.to(NonActiveStoresScreen());
-                  },
-                  child: HomeScreenItem(
-                      'assets/active.json', 'المقاهي الغير النشطه')),            ],
-          ),
-        ),
-        // floatingActionButton: FloatingActionButton(
-        //   child: Icon(Icons.person),
-        //   onPressed: () {
-        //     Get.to(ClientsScreen(users: futureUserData,));
-        //   },
-        // ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(context: context, title: 'رسائل اتصل بنا', isHomeScreen: false),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('contact_us')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('حدث خطأ ما!'));
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('لا توجد رسائل.'));
+          }
+
+          final messages = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final messageData = messages[index].data() as Map<String, dynamic>;
+              final message = messageData['message'] ?? '';
+              final email = messageData['email'] ?? '';
+              final timestamp = messageData['timestamp'] as Timestamp;
+              final formattedDate =
+              DateFormat('yyyy/MM/dd HH:mm').format(timestamp.toDate());
+
+              return Card(
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'الرسالة: $message',
+                        style: titilliumRegular.copyWith(fontSize: 16.0),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'البريد الإلكتروني: $email',
+                        style: titilliumRegular.copyWith(fontSize: 14.0, color: Colors.grey),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'التاريخ: $formattedDate',
+                        style: titilliumRegular.copyWith(fontSize: 12.0, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
-
-  Widget HomeScreenItem(img, text) => Container(
-    width: MediaQuery.of(context).size.width * .4,
-    height: MediaQuery.of(context).size.height * .22,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: Color(0XFF020202),
-        )),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Lottie.asset(
-          img,
-          width: MediaQuery.of(context).size.width * .28,
-          height: MediaQuery.of(context).size.height * .13,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          '${text}',
-          style: titilliumRegular.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w600),
-        ),
-        SizedBox(
-          height: 2,
-        ),
-
-      ],
-    ),
-  );
 }
-

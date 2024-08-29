@@ -38,6 +38,7 @@ class _InfoScreenState extends State<InfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
           context: context, title: widget.title!, isHomeScreen: false),
       body: FutureBuilder<InfoModel>(

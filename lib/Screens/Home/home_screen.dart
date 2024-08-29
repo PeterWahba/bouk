@@ -37,12 +37,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<List<StoreData>> _loadStores() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('stores').get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('stores').get();
 
       // تصفية المتاجر وعرض فقط التي تكون isActive=true
-      List<StoreData> stores = querySnapshot.docs.map((doc) {
-        return StoreData.fromMap(doc.data() as Map<String, dynamic>);
-      }).where((store) => store.isActive == true).toList();
+      List<StoreData> stores = querySnapshot.docs
+          .map((doc) {
+            return StoreData.fromMap(doc.data() as Map<String, dynamic>);
+          })
+          .where((store) => store.isActive == true)
+          .toList();
 
       print(stores);
 
@@ -53,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return [];
     }
   }
-
 
   Future<List<BannerModel>> _loadBannerData() async {
     try {
@@ -74,24 +77,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String _formatAddress(String address) {
+    List<String> parts;
     // تقسيم النص بناءً على الفاصلة
-    List<String> parts = address.split('-');
-
+    if(address.contains('،'))
+       parts = address.split('،');
+    else if(address.contains('-'))
+      parts = address.split('-');
+    else parts = address.split(',');
     // التأكد من وجود ثلاثة أجزاء على الأقل (شارع، مدينة، دولة)
-    if (parts.length >= 3) {
+    if (parts.length >=3) {
       // إزالة المسافات الزائدة من كل جزء
-      String street = parts[0].trim();
+
+      String country = parts[0].trim();
       String city = parts[1].trim();
-      String country = parts[2].trim();
+      String street = parts[2].trim();
 
       // دمج الأجزاء المطلوبة في نص واحد
-      return '$street, $city, $country';
+      return '$country, $city, $street';
     } else {
       // إذا لم يكن العنوان يحتوي على الثلاثة أجزاء، فإرجاع النص الأصلي
       return address;
     }
   }
-
 
   Future<List<SocialModel>> _loadInfoData() async {
     try {
@@ -140,6 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return [];
     }
   }
+
   Future<void> _getCurrentLocationAndAddress() async {
     try {
       // Check for location permissions
@@ -162,8 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (placemarks.isNotEmpty) {
         Placemark placemark = placemarks.first;
         String fullAddress =
-            "${placemark.street}, ${placemark.locality}, ${placemark
-            .administrativeArea}, ${placemark.country}";
+            "${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country}";
 
         // Set the address in the TextField
         setState(() {
@@ -182,10 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _futureStoreData = _loadStores();
     _futureBannerData = _loadBannerData();
     _loadInfoData();
-    _addressController =
-        TextEditingController();
+    _addressController = TextEditingController();
     _getCurrentLocationAndAddress(); // Fetch address on page load
-
   }
 
   int _currentIndex = 0;
@@ -193,23 +198,25 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
         child: Form(
           key: formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Stack(
                 children: [
                   SizedBox(
-                    height: 250.h,
+                    height: 160.h,
                   ),
                   Container(
-                    height: 250.h,
+                    height: 160.h,
                     padding: EdgeInsets.symmetric(horizontal: 30.w),
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
                       gradient: LinearGradient(
                         colors: [
                           Color(0XFF313131),
@@ -218,151 +225,98 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
                           height: 50.h,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => LocationScreen());
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "موقعي:",
-                                    style: titilliumRegular.copyWith(
-                                      fontSize: 12.sp,
-                                      color: Color(0XFFB7B7B7),
-                                    ),
+                        InkWell(
+                            onTap: () {
+                              // Get.to(() => LocationScreen());
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "موقعي: ",
+                                  maxLines: 1,
+                                  style: titilliumRegular.copyWith(
+                                    fontSize: 12.sp,
+                                    color: Color(0XFFB7B7B7),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        _formatAddress(_addressController.text),
-                                        style: titilliumRegular.copyWith(
-                                          fontSize: 14.sp,
-                                          color: Color(0XFFFFFFFF),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down_sharp,
-                                        color: Colors.white,
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Padding(
-                            //   padding: EdgeInsets.only(right: 30.0.w),
-                            //   child: IconButton(
-                            //       icon: Icon(
-                            //         Icons.logout_outlined,
-                            //         color: Colors.red,
-                            //         size: 30,
-                            //       ),
-                            //       onPressed: () => {
-                            //         showDialog(
-                            //             context: context,
-                            //             builder: (_) => AlertDialog(
-                            //               elevation: 24.0,
-                            //               title: Text('هل أنت متأكد ؟',
-                            //                   style: TextStyle(
-                            //                       color: Colors.black)),
-                            //               content: Text(
-                            //                   'سوف تقوم بتسجيل الخروج من حسابكم',
-                            //                   style: TextStyle(
-                            //                       color: Colors.black)),
-                            //               actions: [
-                            //                 CupertinoDialogAction(
-                            //                   child: Container(
-                            //                     child: Text(
-                            //                       'تسجيل الخروج',
-                            //                       style: TextStyle(
-                            //                           color: Colors.red),
-                            //                     ),
-                            //                   ),
-                            //                   onPressed: () {
-                            //                     FbAuthController()
-                            //                         .signOut();
-                            //                   },
-                            //                 ),
-                            //                 CupertinoDialogAction(
-                            //                   child: Text('إلغاء'),
-                            //                   onPressed: () {
-                            //                     Navigator.pop(context);
-                            //                   },
-                            //                 ),
-                            //               ],
-                            //             ))
-                            //       }),
-                            // ),
-                            // InkWell(
-                            //     onTap: () {
-                            //       Get.to(() => SettingsScreen());
-                            //     },
-                            //     child: Icon(
-                            //       Icons.settings_outlined,
-                            //       color: Colors.white,
-                            //       size: 30,
-                            //     )),
-                          ],
+                                ),
+                                Text(
+                                  _formatAddress(
+                                      _addressController.text),
+                                  style: titilliumRegular.copyWith(
+                                      fontSize: 14.sp,
+                                      color: Color(0XFFFFFFFF),
+                                      // fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                  color: Colors.white,
+                                )
+                              ],
+                            )),
+                        SizedBox(
+                          height: 5.h,
                         ),
                         SizedBox(
-                          height: 26.h,
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          maxLines: 1,
-                          cursorHeight: 25.h,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Color(0XFF313131),
-                            prefixIcon: Image.asset(
-                              "assets/search-normal.png",
-                              width: 24.w,
-                              height: 24.h,
-                              fit: BoxFit.scaleDown,
-                            ),
-                            suffixIcon: Container(
-                              margin: EdgeInsets.only(left: 9.5.w),
-                              decoration: BoxDecoration(
-                                color: Color(0XFF2D005D),
-                                borderRadius: BorderRadius.circular(12.r),
+                          height: 50.h,
+                          child: TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            maxLines: 1,
+                            cursorHeight: 15.h,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Color(0XFF313131),
+                              prefixIcon: Image.asset(
+                                "assets/search-normal.png",
+                                width: 24.w,
+                                height: 24.h,
+                                fit: BoxFit.scaleDown,
                               ),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  "assets/furnitur-icon.svg",
+                              suffixIcon: Container(
+                                margin: EdgeInsets.only(left: 9.5.w),
+                                decoration: BoxDecoration(
+                                  color: Color(0XFF2D005D),
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    "assets/furnitur-icon.svg",
+                                  ),
+                                ),
+                                width: 35.5.w,
+                                height: 35.5.h,
+                              ),
+                              contentPadding: const EdgeInsets.all(18),
+                              counterText: "",
+                              labelText: "إبحث عن العلامة التجارية",
+                              labelStyle: titilliumRegular.copyWith(
+                                  color: Color(0XFF989898), fontSize: 14.sp),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
                                 ),
                               ),
-                              width: 46.5.w,
-                              height: 40.5.h,
-                            ),
-                            contentPadding: const EdgeInsets.all(18),
-                            counterText: "",
-                            labelText: "إبحث عن العلامة التجارية",
-                            labelStyle: titilliumRegular.copyWith(
-                                color: Color(0XFF989898), fontSize: 14.sp),
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.r),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                              // focusColor: Color(0XFF22A45D),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                    width: 1,
+                                    color: Colors.grey.shade300,
+                                    style: BorderStyle.solid),
                               ),
-                            ),
-                            // focusColor: Color(0XFF22A45D),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.grey.shade300,
-                                  style: BorderStyle.solid),
                             ),
                           ),
                         ),
@@ -406,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }).toList(),
                           options: carousel.CarouselOptions(
-                            height: 220.h,
+                            height: 180.h,
                             aspectRatio: 16 / 9,
                             viewportFraction: 0.8,
                             initialPage: 0,
@@ -460,8 +414,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "مقاهي قريبة مني",
                   style: titilliumRegular.copyWith(
-                    fontSize: 20.w,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 15.sp,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -469,8 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   future: _futureStoreData,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return
-                        Center(child: StoresShimmer()
+                      return Center(child: StoresShimmer()
                           // SpinKitFadingCircle(
                           //   color: Colors.blue,
                           //   size: 80.0,
@@ -572,22 +525,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                               stores[index].name.toString(),
                                               style: titilliumRegular.copyWith(
                                                 color: Color(0XFF2D005D),
-                                                fontSize: 18.w,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15.sp,
+                                                // fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             Spacer(),
                                             Text(
                                               "4.9",
                                               style: titilliumRegular.copyWith(
-                                                fontSize: 15.w,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12.w,
+                                                // fontWeight: FontWeight.bold,
                                                 color: Color(0XFFFFA800),
                                               ),
                                             ),
                                             Icon(
                                               Icons.star_rate_rounded,
                                               color: Color(0XFFFFA800),
+                                              size: 18.sp,
                                             )
                                           ],
                                         ),
@@ -651,7 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: GoogleFonts.tajawal(
                                   fontSize: 16.sp,
                                   color: const Color.fromARGB(255, 201, 8, 8),
-                                  fontWeight: FontWeight.bold,
+                                  // fontWeight: FontWeight.bold,
                                 ),
                               )
                             ],

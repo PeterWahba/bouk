@@ -57,6 +57,7 @@ class _ActiveStoresScreenState extends State<ActiveStoresScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(context: context, title: 'المقاهي النشطة', isHomeScreen: false),
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
@@ -78,7 +79,15 @@ class _ActiveStoresScreenState extends State<ActiveStoresScreen> {
                   List<StoreData> stores = snapshot.data!;
 
                   if (stores.isNotEmpty) {
-                    return ListView.builder(
+                    return ListView.separated(
+                      separatorBuilder: (ctx,i)=>Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width:double.infinity,
+                          height: 1,
+                          color: Colors.grey.withOpacity(.5),
+                        ),
+                      ),
                       padding: EdgeInsets.all(0),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -148,7 +157,7 @@ class _ActiveStoresScreenState extends State<ActiveStoresScreen> {
                                           child: Row(
                                             children: [
                                               Spacer(),
-                                              Icon(Icons.favorite_border, color: Colors.white),
+                                              // Icon(Icons.favorite_border, color: Colors.white),
                                             ],
                                           ),
                                         )
@@ -164,7 +173,7 @@ class _ActiveStoresScreenState extends State<ActiveStoresScreen> {
                                           stores[index].name.toString(),
                                           style: titilliumRegular.copyWith(
                                             color: Color(0XFF2D005D),
-                                            fontSize: 18.w,
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -172,12 +181,12 @@ class _ActiveStoresScreenState extends State<ActiveStoresScreen> {
                                         Text(
                                           "4.9",
                                           style: titilliumRegular.copyWith(
-                                            fontSize: 15.w,
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0XFFFFA800),
                                           ),
                                         ),
-                                        Icon(Icons.star_rate_rounded, color: Color(0XFFFFA800)),
+                                        Icon(Icons.star_rate_rounded, color: Color(0XFFFFA800),size: 20,),
                                       ],
                                     ),
                                   ),

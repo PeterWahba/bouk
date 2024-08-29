@@ -28,7 +28,7 @@ class _BasketScreenState extends State<BasketScreen> {
         return SafeArea(
           top: false,
           child: Scaffold(
-            // backgroundColor: Colors.white,
+            backgroundColor: Colors.white,
             appBar: BasketAppBar(
               context: context,
               title: 'سلة المشتريات', controller: controller, isHomeScreen: widget.isHomeScreen,
